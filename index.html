@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamo Player — Demo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f0f0f;
+      color: #e8e8e8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      padding: 40px 20px;
+      overflow-y: hidden;
+    }
+    header {
+      text-align: center;
+    }
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #e53935, #ff7043);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    header p {
+      font-size: 14px;
+      color: #888;
+      margin-top: 6px;
+    }
+    .player-container {
+      width: 100%;
+      max-width: 780px;
+    }
+    .code-block {
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: #a8d8a8;
+      border: 1px solid #2a2a2a;
+      max-width: 780px;
+      width: 100%;
+    }
+    .code-block span { color: #7ec8e3; }
+    .code-block em { color: #f9ca74; font-style: normal; }
+    .code-block strong { color: #fc8181; font-weight: normal; }
+    footer {
+      font-size: 12px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>⚡ Dynamo Player</h1>
+    <p>Lightweight · Modern · Zero Bundled Dependencies</p>
+  </header>
+
+  <div class="player-container">
+    <video
+      id="dynamoPlayer"
+      src='https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4'
+      ambientMode="true"
+      inPicture="true"
+      poster="https://image.tmdb.org/t/p/original/6MxCEaIClUJ962LMiu0yTzuZAB.jpg"
+      autoThumbnails="true"
+      controlsOverscreen="true">
+    </video>
+    
+  
+  </video>
+  </div>
+
+  <div class="code-block">
+    <span>&lt;script</span> <em>src</em>=<strong>"dynamo-player.min.js"</strong><span>&gt;&lt;/script&gt;</span><br><br>
+    <span>&lt;video</span> <em>src</em>=<strong>"mi-video.mp4"</strong> <em>id</em>=<strong>"dynamoPlayer"</strong><span>&gt;&lt;/video&gt;</span>
+  </div>
+
+  <footer>Dynamo Player v1.6 — MIT License</footer>
+
+  <script src="dist/dynamo-player.min.js" type="module"></script>
+</body>
+</html>
