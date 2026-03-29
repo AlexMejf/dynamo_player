@@ -1,6 +1,6 @@
 /*!
  * Dynamo Player v1.6.0
- * Archivo principal — orquesta todos los módulos.
+ * Main file — orchestrates all modules.
  * *
  */
 import { DynamoIcons } from './modules/icons.js';
@@ -16,7 +16,7 @@ import { buildAmbientMode } from './modules/ambient.js';
   'use strict';
 
   /**
-   * Inicializa el reproductor sobre un elemento <video id="dynamoPlayer">.
+   * Initializes the player on a <video id="dynamoPlayer"> element.
    * @param {HTMLVideoElement} video
    */
   function initPlayer(video) {
@@ -43,58 +43,66 @@ import { buildAmbientMode } from './modules/ambient.js';
     loader.innerHTML = '<div class="dynamo-spinner"></div>';
     wrapper.appendChild(loader);
 
-    const showLoader = () => loader.classList.add('active');
-    const hideLoader = () => loader.classList.remove('active');
+    const showLoader = () => {
+      loader.classList.add('active');
+      wrapper.classList.add('hide-controls');
+      document.querySelector('.dynamo-overscreen')?.classList.add('hidden');
+    };
+    const hideLoader = () => {
+      loader.classList.remove('active');
+      wrapper.classList.remove('hide-controls');
+      document.querySelector('.dynamo-overscreen')?.classList.remove('hidden') ;
+    };
     video.addEventListener('waiting', showLoader);
     video.addEventListener('playing', hideLoader);
 
-    // ── 4. MENÚ CONTEXTUAL ────────────────────────────────────
+    // ── 4. CONTEXT MENU ────────────────────────────────────
     const menuContext = document.createElement('div');
     menuContext.className = 'dynamo-menu-context';
     wrapper.appendChild(menuContext);
 
-    // ── 5. OVERLAY INICIAL ────────────────────────────────────
+    // ── 5. INITIAL OVERLAY ────────────────────────────────────
     const overlay = document.createElement('div');
     overlay.className = 'dynamo-overlay visible';
     overlay.innerHTML = `<div class="dynamo-big-play">${DynamoIcons.play}</div>`;
     wrapper.appendChild(overlay);
 
-    // ── 6. ESTADO COMPARTIDO ──────────────────────────────────
+    // ── 6. SHARED STATE ──────────────────────────────────
     const state = {
       videoSources:       [],
       globalSubtitles:    [],
       globalAudioTracks:  [],
       activeAudioTrackId: -1,
-      activeSubtitleLabel: 'Apagado',
-      hlsInstance:        null
+      activeSubtitleLabel: 'Off',
+      hlsInstance:         null
     };
 
-    // ── 7. PARSEO DE FUENTE ───────────────────────────────────
+    // ── 7. SOURCE PARSING ───────────────────────────────────
     const rawSrc = video.getAttribute('data-src') || video.getAttribute('src');
-const thumbUrl = video.getAttribute('poster'); // Usa 'poster' que es el estándar de HTML5
+    const thumbUrl = video.getAttribute('poster'); // Uses 'poster' which is the HTML5 standard
 
-if (rawSrc) {
-  try {
-    const parsed = JSON.parse(rawSrc);
-    
-    // Normalizamos los nombres para que sea compatible con ambos formatos
-    state.videoSources = parsed.videoSources || parsed.sources || [];
-    state.globalSubtitles = parsed.globalSubtitles || parsed.subtitles || [];
+    if (rawSrc) {
+      try {
+        const parsed = JSON.parse(rawSrc);
+        
+        // Normalize names for compatibility with both formats
+        state.videoSources = parsed.videoSources || parsed.sources || [];
+        state.globalSubtitles = parsed.globalSubtitles || parsed.subtitles || [];
 
-    if (state.videoSources.length > 0) {
-      loadVideoSource(
-        video,
-        state.videoSources[0].src,
-        state,
-        () => initSubtitles(video, state)
-      );
+        if (state.videoSources.length > 0) {
+          loadVideoSource(
+            video,
+            state.videoSources[0].src,
+            state,
+            () => initSubtitles(video, state)
+          );
+        }
+      } catch (e) {
+        // If not JSON, handle as a simple URL string
+        state.videoSources = [{ label: 'Normal', src: rawSrc }];
+        loadVideoSource(video, rawSrc, state, () => initSubtitles(video, state));
+      }
     }
-  } catch (e) {
-    // Si no es JSON, manejamos URL simple como hacías antes
-    state.videoSources = [{ label: 'Normal', src: rawSrc }];
-    loadVideoSource(video, rawSrc, state, () => initSubtitles(video, state));
-  }
-}
 
     // ── 8. POSTER / THUMBNAIL ─────────────────────────────────
     if (thumbUrl) {
@@ -121,14 +129,14 @@ if (rawSrc) {
       }, { once: true });
     }
 
-    // ── 9. CONTROLES ──────────────────────────────────────────
+    // ── 9. CONTROLS ──────────────────────────────────────────
     const controls = buildControls(wrapper, DynamoIcons);
 
     bindControls(video, wrapper, controls, DynamoIcons, state, loadVideoSource);
 
     buildOverscreen(wrapper, video, DynamoIcons);
 
-    // ── 10. MENÚ ──────────────────────────────────────────────
+    // ── 10. MENU ──────────────────────────────────────────────
     const configBtn = controls.querySelector('.dynamo-config-btn');
     buildMenu(video, menuContext, configBtn, state, loadVideoSource);
 
@@ -136,7 +144,7 @@ if (rawSrc) {
     buildAmbientMode(video, wrapper, thumbUrl);
   }
 
-  // ── ARRANQUE ──────────────────────────────────────────────────
+  // ── STARTUP ──────────────────────────────────────────────────
   function init() {
     injectCSS();
     document.querySelectorAll('video#dynamoPlayer').forEach(initPlayer);
@@ -148,7 +156,7 @@ if (rawSrc) {
     init();
   }
 
-  // API pública
+  // Public API
   global.DynamoPlayer = { init };
 
 })(window);

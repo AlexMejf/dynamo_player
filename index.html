@@ -4,90 +4,824 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dynamo Player — Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red:     #e53935;
+      --red-dim: #7a1a18;
+      --bg:      #080808;
+      --surface: #111111;
+      --surface2:#181818;
+      --border:  rgba(255,255,255,0.07);
+      --text:    #e0e0e0;
+      --muted:   #666;
+      --mono:    'Space Mono', monospace;
+      --sans:    'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      /* Cambiado a proximity para evitar que el scroll se trabe en secciones largas */
+      scroll-snap-type: y proximity; 
+    }
+
     body {
-      background: #0f0f0f;
-      color: #e8e8e8;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(14px);
+      z-index: 200;
+      height: 64px;
+    }
+
+    .logo {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      font-family: var(--mono);
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      border: 1px solid var(--red-dim);
+      color: var(--red);
+      border-radius: 20px;
+    }
+
+    .lang-btn {
+      background: transparent;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+    .lang-btn:hover {
+      background: rgba(229,57,53,0.1);
+    }
+
+    /* ══════════════════════════════════════
+       SNAP SECTIONS
+    ══════════════════════════════════════ */
+    .snap-section {
+      scroll-snap-align: start;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* ── SECCIÓN 1: HERO ── */
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 80px 40px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--red);
+    }
+
+    .hero-left h1 {
+      font-family: var(--mono);
+      font-size: clamp(36px, 4.5vw, 62px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .hero-left h1 span { color: var(--red); }
+
+    .hero-left p {
+      font-size: 15px;
+      color: #888;
+      max-width: 440px;
+      font-weight: 300;
+      margin-bottom: 32px;
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      background: var(--surface);
+    }
+
+    /* ── MOCKUP ── */
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero-right::before {
+      content: '';
+      position: absolute;
+      inset: -15%;
+      background: radial-gradient(ellipse at 60% 50%, rgba(229,57,53,0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .player-mockup {
+      width: 100%;
+      max-width: 460px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 0 0 1px rgba(229,57,53,0.12), 0 40px 90px rgba(0,0,0,0.65), 0 8px 24px rgba(0,0,0,0.45);
+      background: #000;
+      position: relative;
+      animation: floatY 5s ease-in-out infinite;
+    }
+
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+
+    .mockup-img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+    }
+
+    .mockup-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      padding: 3px 8px;
+      background: var(--red);
+      color: #fff;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .mockup-badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #fff;
+      animation: blink 1.2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.15; }
+    }
+
+    .mockup-controls {
+      background: linear-gradient(transparent, rgba(0,0,0,0.88) 40%);
+      padding: 28px 14px 12px;
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+    }
+
+    .mockup-progress {
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 3px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .mockup-progress-fill {
+      position: absolute;
+      left: 0; top: 0; height: 100%;
+      width: 38%;
+      background: var(--red);
+      border-radius: 3px;
+    }
+    .mockup-progress-dot {
+      position: absolute;
+      top: 50%; left: 38%;
+      transform: translate(-50%, -50%);
+      width: 10px; height: 10px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    }
+
+    .mockup-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mockup-icon {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      flex-shrink: 0;
+    }
+    .mockup-icon.bright {
+      background: rgba(255,255,255,0.85);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mockup-icon.bright::after {
+      content: '';
+      border-left: 6px solid #000;
+      border-top: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+      margin-left: 2px;
+    }
+    .mockup-time { font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,0.55); }
+    .mockup-spacer { flex: 1; }
+
+    /* ── SCROLL HINT ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 32px;
-      padding: 40px 20px;
-      overflow-y: hidden;
+      gap: 6px;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.2s forwards;
     }
-    header {
-      text-align: center;
+    .scroll-hint span {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
-    header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #e53935, #ff7043);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .scroll-line {
+      width: 1px; height: 28px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: pulseDown 1.6s ease-in-out infinite;
     }
-    header p {
-      font-size: 14px;
-      color: #888;
-      margin-top: 6px;
+    @keyframes pulseDown {
+      0%, 100% { transform: scaleY(1); opacity: 0.5; }
+      50%      { transform: scaleY(1.4); opacity: 1; }
     }
-    .player-container {
-      width: 100%;
-      max-width: 780px;
+    @keyframes fadeIn { to { opacity: 0.5; } }
+
+    /* ── SECCIÓN 2: DEMO ── */
+    .demo-inner { max-width: 900px; margin: 0 auto; width: 100%; padding: 80px 40px 40px; }
+    .section-label {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
     }
-    .code-block {
-      background: #1a1a1a;
-      border-radius: 8px;
-      padding: 16px 20px;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 13px;
-      color: #a8d8a8;
-      border: 1px solid #2a2a2a;
-      max-width: 780px;
-      width: 100%;
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ── SECCIÓN 3: DOCS ── */
+    .section-docs {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      scroll-snap-align: start;
+      min-height: 100dvh;
+      padding: 80px 40px 60px;
+      display: flex; flex-direction: column; justify-content: center;
     }
-    .code-block span { color: #7ec8e3; }
-    .code-block em { color: #f9ca74; font-style: normal; }
-    .code-block strong { color: #fc8181; font-weight: normal; }
-    footer {
-      font-size: 12px;
-      color: #555;
+
+    .docs-inner { max-width: 900px; margin: 0 auto; width: 100%; }
+    .docs-title { font-family: var(--mono); font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .docs-subtitle { color: var(--muted); font-size: 14px; margin-bottom: 36px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 2px; background: var(--surface2); border-radius: 8px; padding: 4px; margin-bottom: 28px; width: fit-content; border: 1px solid var(--border); flex-wrap: wrap; }
+    .tab-btn { font-family: var(--mono); font-size: 12px; padding: 8px 18px; border: none; background: transparent; color: var(--muted); border-radius: 6px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.03em; }
+    .tab-btn.active { background: var(--red); color: #fff; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* Código */
+    .code-wrap { background: #0d0d0d; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+    .code-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+    .code-lang { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .copy-btn { font-family: var(--mono); font-size: 11px; padding: 4px 10px; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+    .copy-btn:hover { color: #fff; border-color: #fff; }
+    .copy-btn.copied { color: #4caf50; border-color: #4caf50; }
+    pre { padding: 18px 20px; overflow-x: auto; font-family: var(--mono); font-size: 13px; line-height: 1.8; }
+    .t  { color: #e0e0e0; } .tg { color: #78c49a; } .at { color: #79b8ff; } .vl { color: #f9ca74; } .cm { color: #555; font-style: italic; }
+
+    /* Cards */
+    .attrs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .attr-card { background: #0d0d0d; border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; transition: border-color 0.2s; }
+    .attr-card:hover { border-color: rgba(229,57,53,0.3); }
+    .attr-name { font-family: var(--mono); font-size: 12px; color: var(--red); margin-bottom: 4px; }
+    .attr-type { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+    .attr-desc { font-size: 13px; color: #888; line-height: 1.5; }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; }
+    .step { display: grid; grid-template-columns: 40px 1fr; gap: 20px; padding-bottom: 24px; position: relative; }
+    .step:not(:last-child)::before { content: ''; position: absolute; left: 19px; top: 40px; bottom: 0; width: 1px; background: var(--border); }
+    .step-num { width: 40px; height: 40px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 13px; color: var(--red); flex-shrink: 0; position: relative; z-index: 1; }
+    .step-content h3 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 6px; padding-top: 8px; }
+    .step-content p  { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+
+    /* Formats & Keys */
+    .formats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .format-card { background: #0d0d0d; border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
+    .format-label { font-family: var(--mono); font-size: 11px; color: var(--red); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .format-label::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+    .keys-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    .key-item { display: flex; align-items: center; gap: 10px; background: #0d0d0d; border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #888; }
+    kbd { font-family: var(--mono); font-size: 11px; padding: 3px 8px; background: var(--surface2); border: 1px solid rgba(255,255,255,0.15); border-bottom-width: 2px; border-radius: 4px; color: #fff; }
+
+    .link { color: whitesmoke; text-decoration: none; }
+    .link:hover { color: var(--red); text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface);
+      scroll-snap-align: end; 
     }
+    .site-footer span { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .site-header { padding: 16px 20px; height: 56px; }
+      .nav-links { display: none; }
+      .hero-inner { grid-template-columns: 1fr; gap: 36px; padding: 72px 20px 32px; text-align: center; }
+      .hero-eyebrow { justify-content: center; }
+      .hero-left p  { max-width: 100%; }
+      .hero-pills   { justify-content: center; }
+      .hero-right   { width: 100%; }
+      .demo-inner   { padding: 72px 20px 32px; }
+      .section-docs { padding: 60px 20px 48px; }
+      .formats-grid { grid-template-columns: 1fr; }
+      .site-footer  { flex-direction: column; gap: 8px; text-align: center; padding: 24px 20px; }
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-left > * { animation: fadeUp 0.7s ease both; }
+    .hero-left > *:nth-child(1) { animation-delay: 0.05s; }
+    .hero-left > *:nth-child(2) { animation-delay: 0.15s; }
+    .hero-left > *:nth-child(3) { animation-delay: 0.25s; }
+    .hero-left > *:nth-child(4) { animation-delay: 0.35s; }
+    .hero-right { animation: fadeUp 0.8s ease 0.25s both; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>⚡ Dynamo Player</h1>
-    <p>Lightweight · Modern · Zero Bundled Dependencies</p>
+  <header class="site-header">
+    <a class="logo" href="#">⚡ DYNAMO</a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#hero" data-i18n="nav.home">Inicio</a></li>
+        <li><a href="#demo" data-i18n="nav.demo">Demo</a></li>
+        <li><a href="#docs" data-i18n="nav.usage">Uso</a></li>
+        <li><a href="#attr-tab" data-i18n="nav.attributes">Atributos</a></li>
+        <li><a href="#fmt-tab" data-i18n="nav.formats">Formatos</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button id="lang-toggle" class="badge lang-btn">ES / EN</button>
+      <span class="badge">v1.6.1 BETA</span>
+    </div>
   </header>
 
-  <div class="player-container">
-    <video
-      id="dynamoPlayer"
-      src='https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4'
-      ambientMode="true"
-      inPicture="true"
-      poster="https://image.tmdb.org/t/p/original/6MxCEaIClUJ962LMiu0yTzuZAB.jpg"
-      autoThumbnails="true"
-      controlsOverscreen="true">
-    </video>
+
+  <section class="snap-section" id="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow" data-i18n="hero.eyebrow">Reproductor de video</div>
+        <h1>Dynamo<br><span>Player.</span></h1>
+        <p data-i18n="hero.description">Moderno, ligero y sin dependencias. Construido sobre el elemento <code style="font-family:var(--mono);font-size:13px;color:var(--red)">&lt;video&gt;</code> nativo con soporte para HLS, múltiples calidades, subtítulos y modo ambiente.</p>
+        <div class="hero-pills">
+          <span class="pill">HLS / .m3u8</span>
+          <span class="pill" data-i18n="hero.pills.quality">Múltiples calidades</span>
+          <span class="pill" data-i18n="hero.pills.subs">Subtítulos</span>
+          <span class="pill">Ambient Mode</span>
+          <span class="pill">Picture-in-Picture</span>
+          <span class="pill">Zero dependencies</span>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="player-mockup">
+          <img class="mockup-img" src="https://image.tmdb.org/t/p/original/6MxCEaIClUJ962LMiu0yTzuZAB.jpg" alt="Dynamo Player" draggable="false"/>
+          <div class="mockup-badge">HLS</div>
+          <div class="mockup-controls">
+            <div class="mockup-progress">
+              <div class="mockup-progress-fill"></div>
+              <div class="mockup-progress-dot"></div>
+            </div>
+            <div class="mockup-row">
+              <div class="mockup-icon bright"></div>
+              <div class="mockup-icon"></div>
+              <div class="mockup-icon"></div>
+              <span class="mockup-time">1:24 / 3:18</span>
+              <div class="mockup-spacer"></div>
+              <div class="mockup-icon"></div>
+              <div class="mockup-icon"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span data-i18n="hero.scroll">scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="snap-section" id="demo">
+    <div class="demo-inner">
+      <div class="section-label" data-i18n="demo.title">Demo en vivo</div>
+      <video
+        id="dynamoPlayer"
+        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
+        ambientMode="true"
+        inPicture="true"
+        poster="https://image.tmdb.org/t/p/original/6MxCEaIClUJ962LMiu0yTzuZAB.jpg"
+        autoThumbnails="true"
+        controlsOverscreen="true">
+      </video>
+    </div>
+  </section>
+
+  <section class="section-docs" id="docs">
+    <div class="docs-inner">
+      <div class="docs-title" data-i18n="docs.title">Cómo usarlo</div>
+      <div class="docs-subtitle" data-i18n="docs.subtitle">Todo lo que necesitas para integrar Dynamo Player en tu proyecto.</div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="instalacion" data-i18n="docs.tabs.install">Instalación</button>
+        <button class="tab-btn" data-tab="atributos" id="attr-tab" data-i18n="docs.tabs.attributes">Atributos</button>
+        <button class="tab-btn" data-tab="formatos"  id="fmt-tab" data-i18n="docs.tabs.formats">Formatos de fuente</button>
+        <button class="tab-btn" data-tab="teclado" data-i18n="docs.tabs.keyboard">Teclado</button>
+      </div>
+
+      <div class="tab-pane active" id="tab-instalacion">
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h3 data-i18n="docs.install.step1_title">Importación desde CDN</h3>
+              <p><span data-i18n="docs.install.step1_desc">Carga un único archivo JS desde la CDN o descarga el archivo</span> <a class="link" target="_blank" href="https://alexmejf.github.io/dynamo_player/dist/dynamo-player.min.js">dynamo-player.min.js</a></p>
+              <div class="code-wrap">
+                <div class="code-header">
+                  <span class="code-lang">HTML</span>
+                  <button class="copy-btn" onclick="copyCode(this)" data-i18n="docs.install.copy_btn">Copiar</button>
+                </div>
+                <pre><span class="tg">&lt;script</span> <span class="at">src</span>=<span class="vl">"https://alexmejf.github.io/dynamo_player/dist/dynamo-player.min.js"</span><span class="tg">&gt;&lt;/script&gt;</span></pre>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h3 data-i18n="docs.install.step2_title">Agrega el elemento &lt;video&gt;</h3>
+              <p data-i18n="docs.install.step2_desc">El reproductor se activa automáticamente sobre cualquier &lt;video id="dynamoPlayer"&gt; en el DOM.</p>
+              <div class="code-wrap">
+                <div class="code-header">
+                  <span class="code-lang">HTML</span>
+                  <button class="copy-btn" onclick="copyCode(this)" data-i18n="docs.install.copy_btn">Copiar</button>
+                </div>
+                <pre><span class="tg">&lt;video</span>
+  <span class="at">id</span>=<span class="vl">"dynamoPlayer"</span>          <span class="cm" data-i18n="docs.code_comments.req">// Requerido</span>
+  <span class="at">data-src</span>=<span class="vl">"mi-video.mp4"</span>     <span class="cm" data-i18n="docs.code_comments.src">// HLS, M3U8, MP4, WebM...</span>
+  <span class="at">poster</span>=<span class="vl">"poster.jpg"</span>          <span class="cm" data-i18n="docs.code_comments.poster">// url del poster</span>
+  <span class="at">controlsOverscreen</span>=<span class="vl">"true"</span>  <span class="cm" data-i18n="docs.code_comments.controls">// controles sobre el video</span>
+  <span class="at">ambientMode</span>=<span class="vl">"true"</span>          <span class="cm" data-i18n="docs.code_comments.ambient">// modo ambiental</span>
+  <span class="at">autoThumbnails</span>=<span class="vl">"true"</span>       <span class="cm" data-i18n="docs.code_comments.thumbs">// miniaturas en seek</span>
+  <span class="at">inPicture</span>=<span class="vl">"true"</span>            <span class="cm" data-i18n="docs.code_comments.pip">// picture-in-picture</span>
+<span class="tg">&gt;&lt;/video&gt;</span></pre>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h3 data-i18n="docs.install.step3_title">Inicialización dinámica (opcional)</h3>
+              <p data-i18n="docs.install.step3_desc">Si insertas el elemento de video dinámicamente (ej. con JS o un framework), llama a init() manualmente.</p>
+              <div class="code-wrap">
+                <div class="code-header">
+                  <span class="code-lang">JavaScript</span>
+                  <button class="copy-btn" onclick="copyCode(this)" data-i18n="docs.install.copy_btn">Copiar</button>
+                </div>
+                <pre><span data-i18n="docs.code_comments.apiInit" class="cm">// Inicializa todos los &lt;video id="dynamoPlayer"&gt; nuevos</span>
+<span class="t">DynamoPlayer</span><span class="t">.</span><span class="fn">init</span><span class="t">();</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-atributos">
+        <p style="color:var(--muted);font-size:13px;margin-bottom:20px;" data-i18n="docs.attributes.notice">Todos los atributos se declaran directamente en el elemento &lt;video&gt;.</p>
+        <div class="attrs-grid">
+          <div class="attr-card">
+            <div class="attr-name">data-src</div>
+            <div class="attr-type">string | JSON — <span data-i18n="docs.attributes.required">Requerido</span></div>
+            <div class="attr-desc" data-i18n="docs.attributes.desc_src">URL del video o JSON con fuentes múltiples. Soporta .mp4, .webm y .m3u8.</div>
+          </div>
+          <div class="attr-card">
+            <div class="attr-name">poster</div>
+            <div class="attr-type">string (URL)</div>
+            <div class="attr-desc" data-i18n="docs.attributes.desc_poster">Imagen del poster. Si se omite, el player captura un frame automáticamente del video.</div>
+          </div>
+          <div class="attr-card">
+            <div class="attr-name">controlsOverscreen</div>
+            <div class="attr-type">"true" | "false"</div>
+            <div class="attr-desc" data-i18n="docs.attributes.desc_overscreen">Muestra botones de Play/Pausa, Atrás y Adelante flotando sobre el video al estilo streaming.</div>
+          </div>
+          <div class="attr-card">
+            <div class="attr-name">autoThumbnails</div>
+            <div class="attr-type">"true" | "false"</div>
+            <div class="attr-desc" data-i18n="docs.attributes.desc_thumbnails">Activa la previsualización de frames al pasar el cursor por la barra de progreso.</div>
+          </div>
+          <div class="attr-card">
+            <div class="attr-name">ambientMode</div>
+            <div class="attr-type">"true" | "false"</div>
+            <div class="attr-desc" data-i18n="docs.attributes.desc_ambient">Proyecta un halo de luz difusa detrás del player que refleja los colores dominantes del video.</div>
+          </div>
+          <div class="attr-card">
+            <div class="attr-name">inPicture</div>
+            <div class="attr-type">"true" | "false"</div>
+            <div class="attr-desc" data-i18n="docs.attributes.desc_pip">Muestra el botón de Picture-in-Picture. Solo aparece si el navegador soporta la API nativa.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-formatos">
+        <p style="color:var(--muted);font-size:13px;margin-bottom:20px;" data-i18n="docs.formats.notice">El atributo data-src acepta tres formatos distintos.</p>
+        <div class="formats-grid">
+          <div class="format-card">
+            <div class="format-label" data-i18n="docs.formats.simple">URL simple</div>
+            <div class="code-wrap" style="margin:0"><pre style="font-size:12px;"><span class="tg">&lt;video</span>
+  <span class="at">id</span>=<span class="vl">"dynamoPlayer"</span>
+  <span class="at">data-src</span>=<span class="vl">"video.mp4"</span><span class="tg">&gt;
+&lt;/video&gt;</span></pre></div>
+          </div>
+          <div class="format-card">
+            <div class="format-label" data-i18n="docs.formats.hls">HLS (.m3u8)</div>
+            <div class="code-wrap" style="margin:0"><pre style="font-size:12px;"><span class="tg">&lt;video</span>
+  <span class="at">id</span>=<span class="vl">"dynamoPlayer"</span>
+  <span class="at">data-src</span>=<span class="vl">"stream.m3u8"</span><span class="tg">&gt;
+&lt;/video&gt;</span>
+<span class="cm" data-i18n="docs.formats.hls_note">// hls.js se carga automáticamente</span></pre></div>
+          </div>
+          <div class="format-card">
+            <div class="format-label" data-i18n="docs.formats.multiple">Múltiples calidades</div>
+            <div class="code-wrap" style="margin:0"><pre style="font-size:12px;"><span class="at">data-src</span>=<span class="vl">'[
+  { "label": "1080p", "src": "video-1080.mp4" },
+  { "label": "720p",  "src": "video-720.mp4" },
+  { "label": "480p",  "src": "video-480.mp4" }
+]'</span></pre></div>
+          </div>
+          <div class="format-card">
+            <div class="format-label" data-i18n="docs.formats.subs">Con subtítulos</div>
+            <div class="code-wrap" style="margin:0"><pre style="font-size:12px;"><span class="at">data-src</span>=<span class="vl">'{
+  "sources": [
+    { "label": "1080p", "src": "video.mp4" }
+  ],
+  "subtitles": [
+    { "label": "Español", "srclang": "es", "src": "subs-es.vtt", "default": true }
+  ]
+}'</span></pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-teclado">
+        <p style="color:var(--muted);font-size:13px;margin-bottom:24px;" data-i18n="docs.keyboard.notice">El reproductor captura eventos de teclado cuando tiene el foco. Haz clic sobre él para enfocarlo.</p>
+        <div class="keys-grid">
+          <div class="key-item"><kbd>Space</kbd><span data-i18n="docs.keyboard.play_pause">Play / Pausa</span></div>
+          <div class="key-item"><kbd>→</kbd><span data-i18n="docs.keyboard.forward">Adelantar 5 segundos</span></div>
+          <div class="key-item"><kbd>←</kbd><span data-i18n="docs.keyboard.backward">Retroceder 5 segundos</span></div>
+        </div>
+        <div style="margin-top:36px;padding-top:28px;border-top:1px solid var(--border)">
+          <div class="docs-title" style="font-size:20px;margin-bottom:6px;" data-i18n="docs.keyboard.compat_title">Compatibilidad</div>
+          <div class="docs-subtitle" style="margin-bottom:20px;" data-i18n="docs.keyboard.compat_subtitle">Funciona en todos los navegadores modernos.</div>
+          <div class="attrs-grid">
+            <div class="attr-card">
+              <div class="attr-name">Chrome / Edge</div>
+              <div class="attr-desc" style="margin-top:6px;">✅ <span data-i18n="docs.keyboard.compat_chrome">Soporte completo incluyendo Ambient Mode y Auto Thumbnails.</span></div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">Firefox</div>
+              <div class="attr-desc" style="margin-top:6px;">✅ <span data-i18n="docs.keyboard.compat_firefox">Soporte completo. HLS vía hls.js.</span></div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">Safari</div>
+              <div class="attr-desc" style="margin-top:6px;">✅ <span data-i18n="docs.keyboard.compat_safari">HLS nativo. Ambient Mode requiere cabeceras CORS en el servidor.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <span>⚡ Dynamo Player v1.6.1 BY Aex Studios</span>
+    <span>MIT License — Vanilla JS · Zero dependencies</span>
+  </footer>
+
+  <script src="dynamo.js" type="module"></script>
+
+  <script>
+    // 1. TABS LOGIC
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + target).classList.add('active');
+      });
+    });
+
+    document.querySelector('a[href="#attr-tab"]').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('[data-tab="atributos"]').click();
+      document.querySelector('#docs').scrollIntoView({ behavior: 'smooth' });
+    });
     
-  
-  </video>
-  </div>
+    document.querySelector('a[href="#fmt-tab"]').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('[data-tab="formatos"]').click();
+      document.querySelector('#docs').scrollIntoView({ behavior: 'smooth' });
+    });
 
-  <div class="code-block">
-    <span>&lt;script</span> <em>src</em>=<strong>"dynamo-player.min.js"</strong><span>&gt;&lt;/script&gt;</span><br><br>
-    <span>&lt;video</span> <em>src</em>=<strong>"mi-video.mp4"</strong> <em>id</em>=<strong>"dynamoPlayer"</strong><span>&gt;&lt;/video&gt;</span>
-  </div>
+    // 2. COPY CODE LOGIC
+    function copyCode(btn) {
+      const pre = btn.closest('.code-wrap').querySelector('pre');
+      navigator.clipboard.writeText(pre.innerText).then(() => {
+        const isEn = currentLang === 'en';
+        btn.textContent = isEn ? 'Copied!' : '¡Copiado!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = isEn ? 'Copy' : 'Copiar';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
 
-  <footer>Dynamo Player v1.6 — MIT License</footer>
+    // 3. I18N LOGIC (Traducción automática)
+    const translations = {
+      es: {
+        nav: { home: "Inicio", demo: "Demo", usage: "Uso", attributes: "Atributos", formats: "Formatos" },
+        hero: { eyebrow: "Reproductor de video", description: "Moderno, ligero y sin dependencias. Construido sobre el elemento &lt;video&gt; nativo con soporte para HLS, múltiples calidades, subtítulos y modo ambiente.", pills: { quality: "Múltiples calidades", subs: "Subtítulos" }, scroll: "scroll" },
+        demo: { title: "Demo en vivo" },
+        docs: {
+          title: "Cómo usarlo", subtitle: "Todo lo que necesitas para integrar Dynamo Player en tu proyecto.",
+          tabs: { install: "Instalación", attributes: "Atributos", formats: "Formatos de fuente", keyboard: "Teclado" },
+          install: { step1_title: "Importación desde CDN", step1_desc: "Carga un único archivo JS desde la CDN o descarga el archivo", step2_title: "Agrega el elemento &lt;video&gt;", step2_desc: "El reproductor se activa automáticamente sobre cualquier &lt;video id=\"dynamoPlayer\"&gt; en el DOM.", step3_title: "Inicialización dinámica (opcional)", step3_desc: "Si insertas el elemento de video dinámicamente (ej. con JS o un framework), llama a init() manualmente.", copy_btn: "Copiar" },
+          attributes: { notice: "Todos los atributos se declaran directamente en el elemento &lt;video&gt;.", required: "Requerido", desc_src: "URL del video o JSON con fuentes múltiples. Soporta .mp4, .webm y .m3u8.", desc_poster: "Imagen del poster. Si se omite, el player captura un frame automáticamente del video.", desc_overscreen: "Muestra botones de Play/Pausa, Atrás y Adelante flotando sobre el video al estilo streaming.", desc_thumbnails: "Activa la previsualización de frames al pasar el cursor por la barra de progreso.", desc_ambient: "Proyecta un halo de luz difusa detrás del player que refleja los colores dominantes del video.", desc_pip: "Muestra el botón de Picture-in-Picture. Solo aparece si el navegador soporta la API nativa." },
+          formats: { notice: "El atributo data-src acepta tres formatos distintos.", simple: "URL simple", hls: "HLS (.m3u8)", hls_note: "// hls.js se carga automáticamente", multiple: "Múltiples calidades", subs: "Con subtítulos" },
+          keyboard: { notice: "El reproductor captura eventos de teclado cuando tiene el foco. Haz clic sobre él para enfocarlo.", play_pause: "Play / Pausa", forward: "Adelantar 5 segundos", backward: "Retroceder 5 segundos", compat_title: "Compatibilidad", compat_subtitle: "Funciona en todos los navegadores modernos.", compat_chrome: "Soporte completo incluyendo Ambient Mode y Auto Thumbnails.", compat_firefox: "Soporte completo. HLS vía hls.js.", compat_safari: "HLS nativo. Ambient Mode requiere cabeceras CORS en el servidor." },
+          code_comments: {
+  req: "// Requerido",
+  src: "// HLS, M3U8, MP4, WebM...",
+  poster: "// url del poster",
+  controls: "// controles sobre el video",
+  ambient: "// modo ambiental",
+  thumbs: "// miniaturas en seek",
+  pip: "// picture-in-picture",
+  apiInit : "// Inicializa todos los &lt;video id=\"dynamoPlayer\"&gt; nuevos",
+}
+        }
+      },
+      en: {
+        nav: { home: "Home", demo: "Demo", usage: "Usage", attributes: "Attributes", formats: "Formats" },
+        hero: { eyebrow: "Video Player", description: "Modern, lightweight, and dependency-free. Built on top of the native &lt;video&gt; element with support for HLS, multiple qualities, subtitles, and ambient mode.", pills: { quality: "Multiple qualities", subs: "Subtitles" }, scroll: "scroll" },
+        demo: { title: "Live Demo" },
+        docs: {
+          title: "How to use", subtitle: "Everything you need to integrate Dynamo Player into your project.",
+          tabs: { install: "Installation", attributes: "Attributes", formats: "Source Formats", keyboard: "Keyboard" },
+          install: { step1_title: "Import via CDN", step1_desc: "Load a single JS file from the CDN or download the file", step2_title: "Add the &lt;video&gt; element", step2_desc: "The player automatically initializes on any &lt;video id=\"dynamoPlayer\"&gt; in the DOM.", step3_title: "Dynamic initialization (optional)", step3_desc: "If you inject the video element dynamically (e.g., with JS or a framework), call init() manually.", copy_btn: "Copy" },
+          attributes: { notice: "All attributes are declared directly on the &lt;video&gt; element.", required: "Required", desc_src: "Video URL or JSON for multiple sources. Supports .mp4, .webm and .m3u8.", desc_poster: "Poster image. If omitted, the player automatically captures a frame from the video.", desc_overscreen: "Shows streaming-style Play/Pause, Forward, and Backward buttons hovering over the video.", desc_thumbnails: "Enables frame preview when hovering over the progress bar.", desc_ambient: "Projects a soft light halo behind the player that reflects the video's dominant colors.", desc_pip: "Shows the Picture-in-Picture button. Only appears if the browser supports the native API." },
+          formats: { notice: "The data-src attribute accepts three different formats.", simple: "Simple URL", hls: "HLS (.m3u8)", hls_note: "// hls.js loads automatically", multiple: "Multiple qualities", subs: "With subtitles" },
+          keyboard: { notice: "The player captures keyboard events when focused. Click on it to focus.", play_pause: "Play / Pause", forward: "Forward 5 seconds", backward: "Backward 5 seconds", compat_title: "Compatibility", compat_subtitle: "Works on all modern browsers.", compat_chrome: "Full support including Ambient Mode and Auto Thumbnails.", compat_firefox: "Full support. HLS via hls.js.", compat_safari: "Native HLS. Ambient Mode requires CORS headers on the server." },
+          code_comments: {
+  req: "// Required",
+  src: "// HLS, M3U8, MP4, WebM...",
+  poster: "// poster url",
+  controls: "// controls over video",
+  ambient: "// ambient mode",
+  thumbs: "// thumbnails on seek",
+  pip: "// picture-in-picture",
+  apiInit : "// Initializes all &lt;video id=\"dynamoPlayer\"&gt; elements",
+}
+        }
+      }
+    };
 
-  <script src="dist/dynamo-player.min.js" type="module"></script>
+    let currentLang = 'en';
+    changeLanguage(currentLang);
+
+    function changeLanguage(lang) {
+      currentLang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const keys = el.getAttribute('data-i18n').split('.');
+        let text = translations[lang];
+        
+        // Navega por el objeto JSON usando las llaves (ej: "hero.description")
+        keys.forEach(k => { if(text) text = text[k]; });
+        
+        if (text) {
+          // Si el texto contiene HTML (como &lt;video&gt;), usamos innerHTML
+          if (text.includes('<') || text.includes('&lt;')) {
+            el.innerHTML = text;
+          } else {
+            el.textContent = text;
+          }
+        }
+      });
+    }
+
+    // Evento del botón para alternar idiomas
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+      const newLang = currentLang === 'en' ? 'es' : 'en';
+      changeLanguage(newLang);
+    });
+
+  </script>
 </body>
 </html>

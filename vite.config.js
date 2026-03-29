@@ -7,16 +7,16 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'dynamo.js'), 
       name: 'DynamoPlayer',
-      // Cómo se llamará el archivo final
+      // Name of the final output file
       fileName: (format) => `dynamo-player.${format}.js`,
       formats: ['iife', 'es'] 
     },
     rollupOptions: {
-      // Asegúrate de que no incluya dependencias externas si no las quieres
+      // Ensure external dependencies are not included if not desired
       external: [], 
       output: {
         globals: {
-          // Si usaras librerías externas como Hls.js, aquí se mapearían
+          // If using external libraries like Hls.js, they would be mapped here
         }
       }
     },
@@ -25,7 +25,7 @@ export default defineConfig({
     sourcemap: true,   
     terserOptions: {
       format: {
-        comments: false, // Borra todos los comentarios para ahorrar peso
+        comments: false, // Remove all comments to reduce file size
       },
     },
   }

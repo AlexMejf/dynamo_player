@@ -39,17 +39,32 @@ export function buildAmbientMode(video, wrapper, thumbUrl) {
 
   // Initialization
   if (thumbUrl) {
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  
-  img.onload = () => drawStaticAmbient(img);
-  img.onerror = () => console.warn("DynamoPlayer: Ambient mode thumb failed.");
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    
+    img.onload = () => drawStaticAmbient(img);
+    img.onerror = () => console.warn("DynamoPlayer: Ambient mode thumb failed.");
 
-  // Agregamos un timestamp para saltar el caché solo para el canvas
-  const connector = thumbUrl.includes('?') ? '&' : '?';
-  img.src = thumbUrl + connector + 't=' + new Date().getTime(); 
-}
+    // Append a timestamp to bypass cache for the canvas only
+    const connector = thumbUrl.includes('?') ? '&' : '?';
+    img.src = thumbUrl + connector + 't=' + new Date().getTime(); 
+  }
+
+  video.addEventListener('play', () => {
+    cancelAnimationFrame(ambientId); // Clear any ghost loops
+    renderAmbient();
+  });
+  
+  video.addEventListener('playing', () => {
+    cancelAnimationFrame(ambientId);
+    renderAmbient();
+  });
 
   video.addEventListener('pause', () => cancelAnimationFrame(ambientId));
   video.addEventListener('ended', () => cancelAnimationFrame(ambientId));
+
+  // In case the video was already playing when this module loaded
+  if (!video.paused && !video.ended) {
+    renderAmbient();
+  }
 }
