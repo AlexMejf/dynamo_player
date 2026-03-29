@@ -1,5 +1,5 @@
 /*!
- * Dynamo Player v1.6.0
+ * Dynamo Player v1.6.1
  * Main file — orchestrates all modules.
  * *
  */
