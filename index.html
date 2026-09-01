@@ -16,10 +16,10 @@
       <ul class="nav-links">
         <li><a href="#hero" data-i18n="nav.home">Inicio</a></li>
         <li><a href="#demo" data-i18n="nav.demo">Demo</a></li>
+        <li><a href="#whatsnew" data-i18n="nav.whatsnew">Novedades</a></li>
         <li><a href="#docs" data-i18n="nav.usage">Uso</a></li>
         <li><a href="#attr-tab" data-i18n="nav.attributes">Atributos</a></li>
         <li><a href="#fmt-tab" data-i18n="nav.formats">Formatos</a></li>
-        <li><a href="#new-tab" data-i18n="nav.whatsnew">Novedades</a></li>
       </ul>
     </nav>
     <div class="header-actions">
@@ -95,6 +95,37 @@
     </div>
   </section>
 
+  <section class="snap-section" id="whatsnew">
+    <div class="demo-inner" style="padding-top: 60px; padding-bottom: 60px;">
+      <div class="section-label" data-i18n="whatsnew.label">Versión 1.7</div>
+      <div class="docs-title" data-i18n="whatsnew.title">Novedades y Mejoras</div>
+      <div class="docs-subtitle" data-i18n="whatsnew.subtitle">Conoce las nuevas optimizaciones de sincronización, aislamiento y arquitectura.</div>
+
+      <div class="attrs-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 24px;">
+        <div class="attr-card" style="padding: 24px;">
+          <div style="font-size: 24px; margin-bottom: 12px;">🎯</div>
+          <div class="attr-name" style="font-size: 14px;" data-i18n="whatsnew.autohide_title">Ocultamiento Sincronizado</div>
+          <div class="attr-type" data-i18n="whatsnew.autohide_badge">UX &amp; Controles</div>
+          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.autohide_desc">Los controles se mantienen visibles mientras el menú de ajustes esté abierto. La inactividad se reanuda al cerrarlo y el menú se cierra automáticamente si los controles se ocultan por inactividad o pausa.</div>
+        </div>
+
+        <div class="attr-card" style="padding: 24px;">
+          <div style="font-size: 24px; margin-bottom: 12px;">🛡️</div>
+          <div class="attr-name" style="font-size: 14px;" data-i18n="whatsnew.css_title">Aislamiento CSS 100%</div>
+          <div class="attr-type" data-i18n="whatsnew.css_badge">Cero Conflictos</div>
+          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.css_desc">Estilos 100% encapsulados bajo prefijos .dynamo-*. Se eliminaron clases genéricas globales (como .hidden) para garantizar 0 colisiones con Navbars, Tailwind CSS, Bootstrap o layouts externos.</div>
+        </div>
+
+        <div class="attr-card" style="padding: 24px;">
+          <div style="font-size: 24px; margin-bottom: 12px;">👥</div>
+          <div class="attr-name" style="font-size: 14px;" data-i18n="whatsnew.multi_title">Soporte Multi-Reproductor</div>
+          <div class="attr-type" data-i18n="whatsnew.multi_badge">Arquitectura Scoped</div>
+          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.multi_desc">Múltiples reproductores pueden convivir en una misma página de manera totalmente independiente, con closures y consultas DOM aisladas, soportando clases .dynamo-player o data-dynamo.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section-docs" id="docs">
     <div class="docs-inner">
       <div class="docs-title" data-i18n="docs.title">Cómo usarlo</div>
@@ -104,7 +135,6 @@
         <button class="tab-btn active" data-tab="instalacion" data-i18n="docs.tabs.install">Instalación</button>
         <button class="tab-btn" data-tab="atributos" id="attr-tab" data-i18n="docs.tabs.attributes">Atributos</button>
         <button class="tab-btn" data-tab="formatos"  id="fmt-tab" data-i18n="docs.tabs.formats">Formatos de fuente</button>
-        <button class="tab-btn" data-tab="novedades" id="new-tab" data-i18n="docs.tabs.whatsnew">Novedades</button>
         <button class="tab-btn" data-tab="teclado" data-i18n="docs.tabs.keyboard">Teclado</button>
       </div>
 
@@ -239,25 +269,6 @@
     { "label": "Español", "srclang": "es", "src": "subs-es.vtt", "default": true }
   ]
 }'</span></pre></div>
-          </div>
-        </div>
-      <div class="tab-pane" id="tab-novedades">
-        <p style="color:var(--muted);font-size:13px;margin-bottom:20px;" data-i18n="docs.whatsnew.notice">Nuevas características y optimizaciones implementadas en la versión actual.</p>
-        <div class="attrs-grid">
-          <div class="attr-card">
-            <div class="attr-name" data-i18n="docs.whatsnew.autohide_title">🎯 Ocultamiento Sincronizado</div>
-            <div class="attr-type" data-i18n="docs.whatsnew.autohide_badge">UX &amp; Controles</div>
-            <div class="attr-desc" data-i18n="docs.whatsnew.autohide_desc">Los controles se mantienen visibles mientras el menú de configuración esté abierto. La inactividad se reanuda al cerrarlo y el menú se cierra automáticamente si los controles se ocultan.</div>
-          </div>
-          <div class="attr-card">
-            <div class="attr-name" data-i18n="docs.whatsnew.css_title">🛡️ Aislamiento CSS 100%</div>
-            <div class="attr-type" data-i18n="docs.whatsnew.css_badge">Cero Conflictos</div>
-            <div class="attr-desc" data-i18n="docs.whatsnew.css_desc">Estilos 100% encapsulados bajo .dynamo-*. Eliminación de clases globales como .hidden para evitar interferencias con Navbars, Tailwind CSS, Bootstrap o layouts externos.</div>
-          </div>
-          <div class="attr-card">
-            <div class="attr-name" data-i18n="docs.whatsnew.multi_title">👥 Soporte Multi-Reproductor</div>
-            <div class="attr-type" data-i18n="docs.whatsnew.multi_badge">Arquitectura Scoped</div>
-            <div class="attr-desc" data-i18n="docs.whatsnew.multi_desc">Múltiples reproductores pueden convivir en una misma página de manera totalmente independiente, con closures separados y soporte por clase .dynamo-player o data-dynamo.</div>
           </div>
         </div>
       </div>
