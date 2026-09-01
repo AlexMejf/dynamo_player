@@ -153,6 +153,8 @@ export function bindControls(video, wrapper, controls, ICONS, state, loadVideoSo
     }
   }
 
+  const togglePlay = () => video.paused ? video.play() : video.pause();
+
   const onWindowMouseMove = (e) => {
     if (isSeeking) seek(e);
   };
