@@ -23,6 +23,15 @@ export default defineConfig({
     minify: 'terser', 
     sourcemap: true,   
     terserOptions: {
+      compress: {
+        passes: 2,
+        pure_funcs: ['console.log'],
+        unsafe_arrows: true,
+        unsafe_methods: true,
+      },
+      mangle: {
+        toplevel: true,
+      },
       format: {
         comments: false, // Remove all comments to reduce file size
       },
