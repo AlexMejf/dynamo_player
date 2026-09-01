@@ -10,28 +10,42 @@ import { setSubtitle } from './subtitles.js';
  * @param {Function} loadVideoSource
  */
 export function buildMenu(video, menuContext, configBtn, state, loadVideoSource) {
+  const wrapper = menuContext.closest('.dynamo-wrapper') || menuContext.parentElement;
 
   const closeMenu = () => {
+    if (!menuContext.classList.contains('active')) return;
     menuContext.classList.remove('active');
-    document.removeEventListener('click', onDocClick);
+    document.removeEventListener('click', onDocClick, true);
+    menuContext.dispatchEvent(new CustomEvent('dynamo-menu-close', { bubbles: true }));
+  };
+
+  const openMenu = () => {
+    menuContext.classList.add('active');
+    renderMenu('main');
+    setTimeout(() => document.addEventListener('click', onDocClick, true), 0);
+    menuContext.dispatchEvent(new CustomEvent('dynamo-menu-open', { bubbles: true }));
   };
 
   const onDocClick = (e) => {
+    if (!menuContext.classList.contains('active')) {
+      document.removeEventListener('click', onDocClick, true);
+      return;
+    }
     if (!menuContext.contains(e.target) && e.target !== configBtn && !configBtn.contains(e.target)) {
       closeMenu();
     }
   };
 
+  if (wrapper) {
+    wrapper.addEventListener('dynamo-close-menu', closeMenu);
+  }
+
   configBtn.onclick = (e) => {
     e.stopPropagation();
-    const willOpen = !menuContext.classList.contains('active');
-    if (willOpen) {
-      menuContext.classList.add('active');
-      video.paused || video.pause();
-      renderMenu('main');
-      setTimeout(() => document.addEventListener('click', onDocClick), 0);
-    } else {
+    if (menuContext.classList.contains('active')) {
       closeMenu();
+    } else {
+      openMenu();
     }
   };
 

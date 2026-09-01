@@ -126,16 +126,22 @@ export function bindControls(video, wrapper, controls, ICONS, state, loadVideoSo
     }
   }
 
+  function isMenuOpen() {
+    return menuContext ? menuContext.classList.contains('active') : false;
+  }
+
   function showUI() {
     if (poster.classList.contains('hidden')) wrapper.classList.remove('hide-controls');
   }
 
   function scheduleHide() {
     clearHideTimer();
+    if (isMenuOpen()) return;
     if (!video.paused && !video.ended) {
       hideTimer = setTimeout(() => {
-        if (!video.paused && !video.ended) {
+        if (!video.paused && !video.ended && !isMenuOpen()) {
           wrapper.classList.add('hide-controls');
+          wrapper.dispatchEvent(new CustomEvent('dynamo-close-menu'));
         }
       }, 2800);
     }
@@ -201,7 +207,7 @@ export function bindControls(video, wrapper, controls, ICONS, state, loadVideoSo
     playBtn.innerHTML = ICONS.pause;
     poster.classList.add('hidden');
     overlay.classList.remove('visible');
-    menuContext.classList.remove('active');
+    wrapper.dispatchEvent(new CustomEvent('dynamo-close-menu'));
     scheduleHide();
   });
 
@@ -218,6 +224,17 @@ export function bindControls(video, wrapper, controls, ICONS, state, loadVideoSo
     playBtn.innerHTML = ICONS.play;
     overlay.classList.add('visible');
     wrapper.classList.remove('hide-controls', 'is-playing');
+    wrapper.dispatchEvent(new CustomEvent('dynamo-close-menu'));
+  });
+
+  // --- Menu open/close coordination ---
+  wrapper.addEventListener('dynamo-menu-open', () => {
+    showUI();
+    clearHideTimer();
+  });
+
+  wrapper.addEventListener('dynamo-menu-close', () => {
+    scheduleHide();
   });
 
   // --- Buttons ---

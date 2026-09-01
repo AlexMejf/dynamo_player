@@ -46,12 +46,13 @@ import { buildAmbientMode } from './modules/ambient.js';
     const showLoader = () => {
       loader.classList.add('active');
       wrapper.classList.add('hide-controls');
-      document.querySelector('.dynamo-overscreen')?.classList.add('hidden');
+      wrapper.dispatchEvent(new CustomEvent('dynamo-close-menu'));
+      wrapper.querySelector('.dynamo-overscreen')?.classList.add('hidden');
     };
     const hideLoader = () => {
       loader.classList.remove('active');
       wrapper.classList.remove('hide-controls');
-      document.querySelector('.dynamo-overscreen')?.classList.remove('hidden') ;
+      wrapper.querySelector('.dynamo-overscreen')?.classList.remove('hidden');
     };
     video.addEventListener('waiting', showLoader);
     video.addEventListener('playing', hideLoader);
@@ -145,13 +146,21 @@ import { buildAmbientMode } from './modules/ambient.js';
   }
 
   // ── STARTUP ──────────────────────────────────────────────────
-  function init() {
+  function init(target) {
     injectCSS();
-    document.querySelectorAll('video#dynamoPlayer').forEach(initPlayer);
+    if (typeof target === 'string') {
+      document.querySelectorAll(target).forEach(initPlayer);
+    } else if (target instanceof HTMLElement) {
+      initPlayer(target);
+    } else if (target && target.forEach) {
+      target.forEach(initPlayer);
+    } else {
+      document.querySelectorAll('video#dynamoPlayer, video.dynamo-player, video[data-dynamo]').forEach(initPlayer);
+    }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', () => init());
   } else {
     init();
   }

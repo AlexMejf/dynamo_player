@@ -14,6 +14,7 @@
 -   [Installation](#-installation)
 -   [Basic Usage](#-basic-usage)
 -   [Supported Video Sources](#-supported-video-sources)
+-   [New Features & Improvements](#-new-features--improvements)
 -   [Features](#-features)
 -   [Browser Compatibility](#-browser-compatibility)
 -   [JavaScript API](#-javascript-api)
@@ -66,8 +67,22 @@ DynamoPlayer.init();
 
 ## 🎥 Basic Usage
 
+### Single Player
 ``` html
 <video id="dynamoPlayer" data-src="video.mp4"></video>
+```
+
+### Multiple Players on the Same Page
+You can instantiate multiple players seamlessly using classes or data attributes without ID conflicts:
+``` html
+<!-- Video 1 -->
+<video class="dynamo-player" data-src="video1.mp4"></video>
+
+<!-- Video 2 -->
+<video class="dynamo-player" data-src="video2.mp4" ambientMode="true"></video>
+
+<!-- Video 3 (via data attribute) -->
+<video data-dynamo data-src="video3.mp4"></video>
 ```
 
 ------------------------------------------------------------------------
@@ -138,6 +153,24 @@ DynamoPlayer.init();
 
 ------------------------------------------------------------------------
 
+## 🌟 New Features & Improvements
+
+### 🎯 Synchronized Controls & Settings Menu Auto-Hide
+- **Persistent Visibility on Interaction:** When opening the settings menu (Quality, Audio, Speed, Subtitles), the controls bar remains visible and the inactivity countdown is suspended.
+- **Graceful Inactivity Resume:** Once the menu is closed, the inactivity timer smoothly resumes, hiding controls after 2.8s during active playback.
+- **Unified State Coordination:** Controls and menus are strictly linked—if controls hide due to state changes or buffering, menus close automatically to prevent orphan floating overlays.
+
+### 🛡️ Zero Host CSS Bleed (100% Isolated Component Scope)
+- **Scoped Styles:** Removed un-namespaced global CSS rules (such as `.hidden { display: none !important }`) that could collide with host page elements, navigation bars, or utility classes from frameworks like Tailwind CSS and Bootstrap.
+- **Strict Prefixing:** All styles and classes are strictly encapsulated within `.dynamo-*` selectors and the `.dynamo-wrapper` container.
+
+### 👥 Robust Multi-Player Architecture
+- **Autonomous Instances:** Multiple players can coexist on the same web page without cross-talk or conflicting timers, event handlers, or seeking states.
+- **Instance-Scoped DOM Queries:** All internal DOM element queries are performed strictly relative to each player's wrapper element.
+- **Flexible Declarative & JS Instantiation:** Seamless initialization using `.dynamo-player`, `data-dynamo`, `#dynamoPlayer`, or custom selectors via `DynamoPlayer.init()`.
+
+------------------------------------------------------------------------
+
 ## ✨ Features
 
 -   🎛️ Overscreen Controls
@@ -146,6 +179,9 @@ DynamoPlayer.init();
 -   📺 Picture-in-Picture
 -   💬 Subtitle Tracks
 -   🎧 HLS Audio Tracks
+-   🎯 Synchronized Menu & Controls Auto-Hide
+-   👥 Multi-Instance Support on Single Page
+-   🛡️ 100% Component-Scoped CSS (Zero Global Conflicts)
 -   ⚡ Zero dependencies
 -   🧠 Dynamic initialization API
 
@@ -176,8 +212,25 @@ DynamoPlayer.init();
 
 ## 🧠 JavaScript API
 
+### Default Initialization
+Auto-initializes all `<video id="dynamoPlayer">`, `<video class="dynamo-player">`, and `<video data-dynamo>` elements:
 ``` javascript
 DynamoPlayer.init();
+```
+
+### Targeted / Custom Selector Initialization
+Initialize specific elements or custom CSS selectors dynamically:
+``` javascript
+// Target by CSS selector
+DynamoPlayer.init('.my-custom-video-class');
+
+// Target a specific DOM element
+const videoEl = document.querySelector('#specialVideo');
+DynamoPlayer.init(videoEl);
+
+// Target a NodeList or Array
+const videoList = document.querySelectorAll('.gallery-video');
+DynamoPlayer.init(videoList);
 ```
 
 ------------------------------------------------------------------------
