@@ -19,6 +19,7 @@
         <li><a href="#docs" data-i18n="nav.usage">Uso</a></li>
         <li><a href="#attr-tab" data-i18n="nav.attributes">Atributos</a></li>
         <li><a href="#fmt-tab" data-i18n="nav.formats">Formatos</a></li>
+        <li><a href="#new-tab" data-i18n="nav.whatsnew">Novedades</a></li>
       </ul>
     </nav>
     <div class="header-actions">
@@ -45,6 +46,8 @@
           <span class="pill" data-i18n="hero.pills.subs">Subtítulos</span>
           <span class="pill">Ambient Mode</span>
           <span class="pill">Picture-in-Picture</span>
+          <span class="pill" data-i18n="hero.pills.multi">Multi-Player</span>
+          <span class="pill" data-i18n="hero.pills.zero_css">Zero CSS Conflicts</span>
           <span class="pill">Zero dependencies</span>
         </div>
       </div>
@@ -101,6 +104,7 @@
         <button class="tab-btn active" data-tab="instalacion" data-i18n="docs.tabs.install">Instalación</button>
         <button class="tab-btn" data-tab="atributos" id="attr-tab" data-i18n="docs.tabs.attributes">Atributos</button>
         <button class="tab-btn" data-tab="formatos"  id="fmt-tab" data-i18n="docs.tabs.formats">Formatos de fuente</button>
+        <button class="tab-btn" data-tab="novedades" id="new-tab" data-i18n="docs.tabs.whatsnew">Novedades</button>
         <button class="tab-btn" data-tab="teclado" data-i18n="docs.tabs.keyboard">Teclado</button>
       </div>
 
@@ -124,14 +128,14 @@
             <div class="step-num">2</div>
             <div class="step-content">
               <h3 data-i18n="docs.install.step2_title">Agrega el elemento &lt;video&gt;</h3>
-              <p data-i18n="docs.install.step2_desc">El reproductor se activa automáticamente sobre cualquier &lt;video id="dynamoPlayer"&gt; en el DOM.</p>
+              <p data-i18n="docs.install.step2_desc">El reproductor se activa automáticamente sobre cualquier &lt;video class="dynamo-player"&gt;, &lt;video data-dynamo&gt; o &lt;video id="dynamoPlayer"&gt; en el DOM.</p>
               <div class="code-wrap">
                 <div class="code-header">
                   <span class="code-lang">HTML</span>
                   <button class="copy-btn" onclick="copyCode(this)" data-i18n="docs.install.copy_btn">Copiar</button>
                 </div>
                 <pre><span class="tg">&lt;video</span>
-  <span class="at">id</span>=<span class="vl">"dynamoPlayer"</span>          <span class="cm" data-i18n="docs.code_comments.req">// Requerido</span>
+  <span class="at">class</span>=<span class="vl">"dynamo-player"</span>     <span class="cm" data-i18n="docs.code_comments.req">// o id="dynamoPlayer" / data-dynamo</span>
   <span class="at">data-src</span>=<span class="vl">"mi-video.mp4"</span>     <span class="cm" data-i18n="docs.code_comments.src">// HLS, M3U8, MP4, WebM...</span>
   <span class="at">poster</span>=<span class="vl">"poster.jpg"</span>          <span class="cm" data-i18n="docs.code_comments.poster">// url del poster</span>
   <span class="at">controlsOverscreen</span>=<span class="vl">"true"</span>  <span class="cm" data-i18n="docs.code_comments.controls">// controles sobre el video</span>
@@ -146,14 +150,17 @@
             <div class="step-num">3</div>
             <div class="step-content">
               <h3 data-i18n="docs.install.step3_title">Inicialización dinámica (opcional)</h3>
-              <p data-i18n="docs.install.step3_desc">Si insertas el elemento de video dinámicamente (ej. con JS o un framework), llama a init() manualmente.</p>
+              <p data-i18n="docs.install.step3_desc">Si insertas el elemento de video dinámicamente o usas selectores personalizados, llama a init() manualmente.</p>
               <div class="code-wrap">
                 <div class="code-header">
                   <span class="code-lang">JavaScript</span>
                   <button class="copy-btn" onclick="copyCode(this)" data-i18n="docs.install.copy_btn">Copiar</button>
                 </div>
-                <pre><span data-i18n="docs.code_comments.apiInit" class="cm">// Inicializa todos los &lt;video id="dynamoPlayer"&gt; nuevos</span>
-<span class="t">DynamoPlayer</span><span class="t">.</span><span class="fn">init</span><span class="t">();</span></pre>
+                <pre><span data-i18n="docs.code_comments.apiInit" class="cm">// Inicializa automáticamente todos los reproductores</span>
+<span class="t">DynamoPlayer</span><span class="t">.</span><span class="fn">init</span><span class="t">();</span>
+
+<span data-i18n="docs.code_comments.apiCustom" class="cm">// O con selector personalizado / elemento específico</span>
+<span class="t">DynamoPlayer</span><span class="t">.</span><span class="fn">init</span><span class="t">(</span><span class="vl">'.mi-clase-de-video'</span><span class="t">);</span></pre>
               </div>
             </div>
           </div>
@@ -232,6 +239,25 @@
     { "label": "Español", "srclang": "es", "src": "subs-es.vtt", "default": true }
   ]
 }'</span></pre></div>
+          </div>
+        </div>
+      <div class="tab-pane" id="tab-novedades">
+        <p style="color:var(--muted);font-size:13px;margin-bottom:20px;" data-i18n="docs.whatsnew.notice">Nuevas características y optimizaciones implementadas en la versión actual.</p>
+        <div class="attrs-grid">
+          <div class="attr-card">
+            <div class="attr-name" data-i18n="docs.whatsnew.autohide_title">🎯 Ocultamiento Sincronizado</div>
+            <div class="attr-type" data-i18n="docs.whatsnew.autohide_badge">UX &amp; Controles</div>
+            <div class="attr-desc" data-i18n="docs.whatsnew.autohide_desc">Los controles se mantienen visibles mientras el menú de configuración esté abierto. La inactividad se reanuda al cerrarlo y el menú se cierra automáticamente si los controles se ocultan.</div>
+          </div>
+          <div class="attr-card">
+            <div class="attr-name" data-i18n="docs.whatsnew.css_title">🛡️ Aislamiento CSS 100%</div>
+            <div class="attr-type" data-i18n="docs.whatsnew.css_badge">Cero Conflictos</div>
+            <div class="attr-desc" data-i18n="docs.whatsnew.css_desc">Estilos 100% encapsulados bajo .dynamo-*. Eliminación de clases globales como .hidden para evitar interferencias con Navbars, Tailwind CSS, Bootstrap o layouts externos.</div>
+          </div>
+          <div class="attr-card">
+            <div class="attr-name" data-i18n="docs.whatsnew.multi_title">👥 Soporte Multi-Reproductor</div>
+            <div class="attr-type" data-i18n="docs.whatsnew.multi_badge">Arquitectura Scoped</div>
+            <div class="attr-desc" data-i18n="docs.whatsnew.multi_desc">Múltiples reproductores pueden convivir en una misma página de manera totalmente independiente, con closures separados y soporte por clase .dynamo-player o data-dynamo.</div>
           </div>
         </div>
       </div>
