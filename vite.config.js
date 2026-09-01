@@ -6,15 +6,27 @@ import { readFileSync } from 'fs';
 // Lee dinámicamente la información del package.json
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'));
 
-// Genera la marca de agua / banner oficial
+// Centra la versión dinámicamente en el marco ASCII de Aex Studios
+const verStr = String(pkg.version || '1.7');
+const totalWidth = 59;
+const padStart = Math.max(0, Math.floor((totalWidth - verStr.length) / 2));
+const padEnd = Math.max(0, totalWidth - verStr.length - padStart);
+const versionLine = `*   | |${' '.repeat(padStart)}${verStr}${' '.repeat(padEnd)}| |`;
+
+// Marca de agua oficial en ASCII Art
 const banner = `/*!
- * Dynamo Player v${pkg.version}
- * ${pkg.description || 'Ultra-lightweight & modern HTML5 web video player'}
- * Author: ${pkg.author || 'Aex Studios (Alex Mejia)'}
- * License: ${pkg.license || 'MIT'}
- * Repository: https://github.com/AlexMejf/dynamo_player
- * Build Date: ${new Date().toISOString().split('T')[0]}
- */
+* __| |___________________________________________________________| |__
+* __   ___________________________________________________________   __
+*   | |                                                           | |  
+*   | |    _    _______  __  ____ _____ _   _ ____ ___ ___  ____  | |  
+*   | |   / \\  | ____\\ \\/ / / ___|_   _| | | |  _ \\_ _/ _ \\/ ___| | |  
+*   | |  / _ \\ |  _|  \\  /  \\___ \\ | | | | | | | | | | | | \\___ \\ | |  
+*   | | / ___ \\| |___ /  \\   ___) || | | |_| | |_| | | |_| |___) || |  
+*   | |/_/   \\_\\_____/_/\\_\\ |____/ |_|  \\___/|____/___\\___/|____/ | |  
+* __| |___________________________________________________________| |__
+* __   ___________________________________________________________   __
+${versionLine}  
+*/
 `;
 
 export default defineConfig({
@@ -48,7 +60,7 @@ export default defineConfig({
         toplevel: true,
       },
       format: {
-        comments: /^!/, // Preserva comentarios de licencia / marca de agua con /*!
+        comments: /^!/, // Preserva el banner ASCII
       },
     },
   },
