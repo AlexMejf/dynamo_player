@@ -166,6 +166,9 @@ import { buildAmbientMode } from './modules/ambient.js';
   }
 
   // Public API
-  global.DynamoPlayer = { init };
+  global.DynamoPlayer = {
+    init,
+    version: typeof __VERSION__ !== 'undefined' ? __VERSION__ : '1.7.0',
+  };
 
 })(window);

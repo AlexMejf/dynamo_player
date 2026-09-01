@@ -1,16 +1,23 @@
 {
-  "name": "dynamo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "dynamo-player",
+  "version": "1.7.0",
+  "description": "Ultra-lightweight & modern HTML5 web video player with HLS, ambient mode and multi-quality support",
+  "main": "dist/dynamo-player.es.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "vite build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "video",
+    "player",
+    "hls",
+    "html5-video",
+    "ambient-mode",
+    "streaming"
+  ],
+  "author": "Aex Studios (Alex Mejia)",
+  "license": "MIT",
   "type": "module",
   "devDependencies": {
     "terser": "^5.46.1",
