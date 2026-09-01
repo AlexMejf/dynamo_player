@@ -58,7 +58,7 @@ function applySubtitleVisibility(video, state) {
  * @param {string} selectedLabel - Subtitle label or 'Off'
  * @param {number|string} hlsId - Track ID in hls.js (-1 to turn off)
  */
-function setSubtitle(video, state, selectedLabel, hlsId) {
+export function setSubtitle(video, state, selectedLabel, hlsId) {
   state.activeSubtitleLabel = selectedLabel;
 
   if (state.hlsInstance && state.globalSubtitles.some(s => s.isHls)) {

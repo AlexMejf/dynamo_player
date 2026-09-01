@@ -1,0 +1,7 @@
+node_modules/.vite/
+.vite/
+.DS_Store
+Thumbs.db
+*.log
+AGENTS.md
+agents.md

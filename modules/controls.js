@@ -119,13 +119,26 @@ export function bindControls(video, wrapper, controls, ICONS, state, loadVideoSo
     return video.duration;
   };
 
+  function clearHideTimer() {
+    if (hideTimer) {
+      clearTimeout(hideTimer);
+      hideTimer = null;
+    }
+  }
+
   function showUI() {
     if (poster.classList.contains('hidden')) wrapper.classList.remove('hide-controls');
   }
 
   function scheduleHide() {
-    clearTimeout(hideTimer);
-    if (!video.paused) hideTimer = setTimeout(() => wrapper.classList.add('hide-controls'), 2800);
+    clearHideTimer();
+    if (!video.paused && !video.ended) {
+      hideTimer = setTimeout(() => {
+        if (!video.paused && !video.ended) {
+          wrapper.classList.add('hide-controls');
+        }
+      }, 2800);
+    }
   }
 
   function seek(e) {
@@ -140,12 +153,25 @@ export function bindControls(video, wrapper, controls, ICONS, state, loadVideoSo
     }
   }
 
-  const togglePlay = () => video.paused ? video.play() : video.pause();
+  const onWindowMouseMove = (e) => {
+    if (isSeeking) seek(e);
+  };
+
+  const onWindowMouseUp = () => {
+    if (isSeeking) {
+      isSeeking = false;
+      window.removeEventListener('mousemove', onWindowMouseMove);
+      window.removeEventListener('mouseup', onWindowMouseUp);
+    }
+  };
 
   // --- Seekbar ---
-  progressWrap.addEventListener('mousedown', (e) => { isSeeking = true; seek(e); });
-  window.addEventListener('mousemove', (e) => { if (isSeeking) seek(e); });
-  window.addEventListener('mouseup', () => { isSeeking = false; });
+  progressWrap.addEventListener('mousedown', (e) => {
+    isSeeking = true;
+    seek(e);
+    window.addEventListener('mousemove', onWindowMouseMove);
+    window.addEventListener('mouseup', onWindowMouseUp);
+  });
 
   // --- Buffer ---
   video.addEventListener('progress', () => {
@@ -178,13 +204,15 @@ export function bindControls(video, wrapper, controls, ICONS, state, loadVideoSo
   });
 
   video.addEventListener('pause', () => {
-    wrapper.classList.remove('is-playing');
+    clearHideTimer();
+    wrapper.classList.remove('is-playing', 'hide-controls');
     playBtn.innerHTML = ICONS.play;
     overlay.classList.add('visible');
-    wrapper.classList.remove('hide-controls');
   });
 
   video.addEventListener('ended', () => {
+    clearHideTimer();
+    onWindowMouseUp();
     playBtn.innerHTML = ICONS.play;
     overlay.classList.add('visible');
     wrapper.classList.remove('hide-controls', 'is-playing');
@@ -326,55 +354,4 @@ function bindProgressPreview(video, progressWrap, progressTooltip, progressPrevi
       }
     }
   });
-}
-
-/**
- * Initializes the Ambient Light effect if the attribute is active.
- * @param {HTMLVideoElement} video
- * @param {HTMLElement} wrapper
- * @param {string} thumbUrl
- */
-export function buildAmbientMode(video, wrapper, thumbUrl) {
-  if (video.getAttribute('ambientMode') !== 'true') return;
-
-  const ambientCanvas = document.createElement('canvas');
-  ambientCanvas.className = 'dynamo-ambient-canvas';
-  ambientCanvas.width = 32;
-  ambientCanvas.height = 18;
-  wrapper.prepend(ambientCanvas);
-
-  const ambientCtx = ambientCanvas.getContext('2d', { alpha: false });
-  let ambientId;
-
-  const drawStaticAmbient = (sourceElement) => {
-    try {
-      ambientCtx.drawImage(sourceElement, 0, 0, ambientCanvas.width, ambientCanvas.height);
-      wrapper.classList.add('ambient-active');
-    } catch (e) {
-      console.warn('DynamoPlayer: Ambient mode CORS block on static image.');
-    }
-  };
-
-  const renderAmbient = () => {
-    if (video.paused || video.ended) return;
-    try {
-      ambientCtx.drawImage(video, 0, 0, ambientCanvas.width, ambientCanvas.height);
-    } catch (e) {}
-    ambientId = requestAnimationFrame(renderAmbient);
-  };
-
-  if (thumbUrl) {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => drawStaticAmbient(img);
-    img.src = thumbUrl;
-  } else {
-    video.addEventListener('loadeddata', () => {
-      setTimeout(() => drawStaticAmbient(video), 200);
-    }, { once: true });
-  }
-
-  video.addEventListener('play',  () => { wrapper.classList.add('ambient-active'); renderAmbient(); });
-  video.addEventListener('pause', () => cancelAnimationFrame(ambientId));
-  video.addEventListener('ended', () => cancelAnimationFrame(ambientId));
 }

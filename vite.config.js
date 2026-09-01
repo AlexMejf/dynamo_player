@@ -7,8 +7,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'dynamo.js'), 
       name: 'DynamoPlayer',
-      // Name of the final output file
-      fileName: (format) => `dynamo-player.${format}.js`,
+      fileName: (format) => format === 'iife' ? 'dynamo-player.min.js' : `dynamo-player.${format}.js`,
       formats: ['iife', 'es'] 
     },
     rollupOptions: {

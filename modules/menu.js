@@ -1,8 +1,4 @@
-/* =========================================================
-    Dynamo Player — modules/menu.js
-    Contextual Settings Menu:
-    Quality, Audio, Speed, and Subtitles.
-   ========================================================= */
+import { setSubtitle } from './subtitles.js';
 
 /**
  * Initializes the settings button and its popup menu.
@@ -15,18 +11,29 @@
  */
 export function buildMenu(video, menuContext, configBtn, state, loadVideoSource) {
 
-  configBtn.onclick = (e) => {
-    e.stopPropagation();
-    menuContext.classList.toggle('active');
-    if (!menuContext.classList.contains('active')) return;
-
-    // Pause while navigating the menu
-    video.paused || video.pause();
-    renderMenu('main');
+  const closeMenu = () => {
+    menuContext.classList.remove('active');
+    document.removeEventListener('click', onDocClick);
   };
 
-  // Close menu when clicking outside
-  document.addEventListener('click', () => menuContext.classList.remove('active'));
+  const onDocClick = (e) => {
+    if (!menuContext.contains(e.target) && e.target !== configBtn && !configBtn.contains(e.target)) {
+      closeMenu();
+    }
+  };
+
+  configBtn.onclick = (e) => {
+    e.stopPropagation();
+    const willOpen = !menuContext.classList.contains('active');
+    if (willOpen) {
+      menuContext.classList.add('active');
+      video.paused || video.pause();
+      renderMenu('main');
+      setTimeout(() => document.addEventListener('click', onDocClick), 0);
+    } else {
+      closeMenu();
+    }
+  };
 
   // -------------------------------------------------------
   // View Renderer
@@ -133,7 +140,7 @@ export function buildMenu(video, menuContext, configBtn, state, loadVideoSource)
             if (wasPlaying) video.play();
           }, 150);
         }
-        menuContext.classList.remove('active');
+        closeMenu();
       };
     });
   }
@@ -155,7 +162,7 @@ export function buildMenu(video, menuContext, configBtn, state, loadVideoSource)
       item.onclick = (ev) => {
         ev.stopPropagation();
         if (state.hlsInstance) state.hlsInstance.audioTrack = parseInt(item.dataset.id);
-        menuContext.classList.remove('active');
+        closeMenu();
       };
     });
   }
@@ -186,7 +193,7 @@ export function buildMenu(video, menuContext, configBtn, state, loadVideoSource)
       item.onclick = (ev) => {
         ev.stopPropagation();
         video.playbackRate = parseFloat(item.dataset.val);
-        menuContext.classList.remove('active');
+        closeMenu();
       };
     });
   }
@@ -218,7 +225,7 @@ export function buildMenu(video, menuContext, configBtn, state, loadVideoSource)
         ev.stopPropagation();
         // Delegate to the subtitles module
         setSubtitle(video, state, item.dataset.label, item.dataset.id);
-        menuContext.classList.remove('active');
+        closeMenu();
       };
     });
   }

@@ -1,7 +1,7 @@
 # ⚡ Dynamo Player
 
 
-> **v1.6.1 Beta** --- A modern, lightweight and dependency-free video
+> **v1.7 Beta** --- A modern, lightweight and dependency-free video
 > player built on top of the native HTML `<video>` element with support
 > for **HLS, multiple qualities, subtitles, ambient mode, auto
 > thumbnails, PiP, audio tracks, and more**.
