@@ -39,7 +39,7 @@
     const translations = {
       es: {
         nav: { home: "Inicio", demo: "Demo", whatsnew: "Novedades", usage: "Uso", attributes: "Atributos", formats: "Formatos" },
-        hero: { eyebrow: "Reproductor de video", description: "Moderno, ligero y sin dependencias. Construido sobre el elemento &lt;video&gt; nativo con soporte para HLS, múltiples calidades, subtítulos y modo ambiente.", pills: { quality: "Múltiples calidades", subs: "Subtítulos", multi: "Multi-Player", zero_css: "Aislamiento CSS 100%" }, scroll: "scroll" },
+        hero: { eyebrow: "Reproductor de video", description: "Moderno, ligero y sin dependencias. Construido sobre el elemento &lt;video&gt; nativo con soporte para HLS, múltiples calidades, subtítulos y modo ambiente.", pills: { quality: "Múltiples calidades", subs: "Subtítulos", multi: "Multi-Player", zero_css: "Aislamiento CSS 100%", lightweight: "~8 KB Gzip (-51% peso)" }, scroll: "scroll" },
         demo: { title: "Demo en vivo" },
         whatsnew: {
           label: "Versión 1.7",
@@ -53,7 +53,10 @@
           css_desc: "Estilos 100% encapsulados bajo prefijos .dynamo-*. Eliminación de clases globales como .hidden para evitar interferencias con Navbars, Tailwind CSS, Bootstrap o layouts externos.",
           multi_title: "👥 Soporte Multi-Reproductor",
           multi_badge: "Arquitectura Scoped",
-          multi_desc: "Múltiples reproductores pueden convivir en una misma página de manera totalmente independiente, con closures y consultas DOM aisladas, soportando clases .dynamo-player o data-dynamo."
+          multi_desc: "Múltiples reproductores pueden convivir en una misma página de manera totalmente independiente, con closures y consultas DOM aisladas, soportando clases .dynamo-player o data-dynamo.",
+          weight_title: "⚡ 51% Más Ligero (~8 KB Gzip)",
+          weight_badge: "Rendimiento Extremo",
+          weight_desc: "El bundle se redujo de 63 KB a solo 30.9 KB (reducción del 51% y 55% en transferencia de red gzip) mediante la vectorización pura de SVG y compresión avanzada."
         },
         docs: {
           title: "Cómo usarlo", subtitle: "Todo lo que necesitas para integrar Dynamo Player en tu proyecto.",
@@ -77,7 +80,7 @@
       },
       en: {
         nav: { home: "Home", demo: "Demo", whatsnew: "What's New", usage: "Usage", attributes: "Attributes", formats: "Formats" },
-        hero: { eyebrow: "Video Player", description: "Modern, lightweight, and dependency-free. Built on top of the native &lt;video&gt; element with support for HLS, multiple qualities, subtitles, and ambient mode.", pills: { quality: "Multiple qualities", subs: "Subtitles", multi: "Multi-Player", zero_css: "100% Scoped CSS" }, scroll: "scroll" },
+        hero: { eyebrow: "Video Player", description: "Modern, lightweight, and dependency-free. Built on top of the native &lt;video&gt; element with support for HLS, multiple qualities, subtitles, and ambient mode.", pills: { quality: "Multiple qualities", subs: "Subtitles", multi: "Multi-Player", zero_css: "100% Scoped CSS", lightweight: "~8 KB Gzip (-51% size)" }, scroll: "scroll" },
         demo: { title: "Live Demo" },
         whatsnew: {
           label: "Version 1.7",
@@ -91,7 +94,10 @@
           css_desc: "All styles are strictly encapsulated under .dynamo-* prefixes. Removed un-namespaced global classes like .hidden to avoid conflicts with Navbars, Tailwind CSS, Bootstrap, or external layouts.",
           multi_title: "👥 Multi-Player Architecture",
           multi_badge: "Scoped Architecture",
-          multi_desc: "Multiple players can coexist on the same web page completely independently, with isolated closures and DOM queries, supporting .dynamo-player class or data-dynamo."
+          multi_desc: "Multiple players can coexist on the same web page completely independently, with isolated closures and DOM queries, supporting .dynamo-player class or data-dynamo.",
+          weight_title: "⚡ 51% Lighter (~8 KB Gzip)",
+          weight_badge: "Extreme Performance",
+          weight_desc: "The bundle was reduced from 63 KB down to only 30.9 KB (51% raw size reduction and 55% gzipped network savings) through pure SVG vectorization and advanced compression."
         },
         docs: {
           title: "How to use", subtitle: "Everything you need to integrate Dynamo Player into your project.",
