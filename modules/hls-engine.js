@@ -13,6 +13,15 @@
  * @param {Function} onSubtitlesReady - Callback to apply subtitles after parsing
  */
 function initHlsEngine(video, sourceUrl, state, onSubtitlesReady) {
+  if (state.hlsInstance) {
+    try { state.hlsInstance.detachMedia(); } catch (e) {}
+    state.hlsInstance.destroy();
+    state.hlsInstance = null;
+  }
+
+  video.removeAttribute('src');
+  video.load();
+
   if (typeof window.Hls === 'undefined' || !window.Hls.isSupported()) {
     // Fallback: Safari with native HLS support
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
@@ -21,8 +30,6 @@ function initHlsEngine(video, sourceUrl, state, onSubtitlesReady) {
     }
     return;
   }
-
-  if (state.hlsInstance) state.hlsInstance.destroy();
 
   state.hlsInstance = new window.Hls();
   state.hlsInstance.loadSource(sourceUrl);
@@ -108,13 +115,18 @@ export function loadVideoSource(video, sourceUrl, state, onSubtitlesReady) {
   } else {
     // Native MP4/WebM source: clear HLS if it was active
     if (state.hlsInstance) {
+      try { state.hlsInstance.detachMedia(); } catch (e) {}
       state.hlsInstance.destroy();
       state.hlsInstance = null;
       state.globalAudioTracks = [];
       state.activeAudioTrackId = -1;
       state.globalSubtitles = state.globalSubtitles.filter(sub => !sub.isHls);
     }
+    video.removeAttribute('src');
+    video.load();
     video.src = sourceUrl;
+    video.setAttribute('src', sourceUrl);
+    video.load();
     onSubtitlesReady();
   }
 }

@@ -44,3 +44,49 @@ export function injectCSS() {
   style.textContent = rawStyle;
   document.head.appendChild(style);
 }
+
+/**
+ * Supported aspect ratio and screen-fit modes.
+ */
+export const ASPECT_MODES = [
+  { id: 'contain', label: 'Fit (Original)' },
+  { id: 'cover',   label: 'Fill (Zoom)' },
+  { id: '16-9',    label: '16:9' },
+  { id: '4-3',     label: '4:3' }
+];
+
+/**
+ * Applies the specified aspect ratio / fit mode to the video and wrapper.
+ *
+ * @param {HTMLVideoElement} video
+ * @param {HTMLElement} wrapper
+ * @param {object} state
+ * @param {string} mode - 'contain' | 'cover' | '16-9' | '4-3'
+ * @returns {string} The active mode's human-readable label
+ */
+export function setAspectRatio(video, wrapper, state, mode) {
+  state.aspectRatio = mode;
+
+  wrapper.classList.remove('fit-cover');
+  wrapper.style.aspectRatio = '';
+  if (video) {
+    video.style.aspectRatio = '';
+    video.style.objectFit = 'contain';
+  }
+
+  if (mode === 'cover') {
+    wrapper.classList.add('fit-cover');
+    if (video) video.style.objectFit = 'cover';
+  } else if (mode === '16-9') {
+    wrapper.style.aspectRatio = '16 / 9';
+    if (video) video.style.aspectRatio = '16 / 9';
+  } else if (mode === '4-3') {
+    wrapper.style.aspectRatio = '4 / 3';
+    if (video) video.style.aspectRatio = '4 / 3';
+  }
+
+  const found = ASPECT_MODES.find(m => m.id === mode);
+  const label = found ? found.label : 'Fit';
+  wrapper.dispatchEvent(new CustomEvent('dynamo-aspect-change', { detail: { mode, label }, bubbles: true }));
+  return label;
+}

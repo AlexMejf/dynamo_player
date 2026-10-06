@@ -1,6 +1,6 @@
 {
   "name": "dynamo-player",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Ultra-lightweight & modern HTML5 web video player with HLS, ambient mode and multi-quality support",
   "main": "dist/dynamo-player.es.js",
   "scripts": {

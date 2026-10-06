@@ -1,4 +1,5 @@
 import { setSubtitle } from './subtitles.js';
+import { ASPECT_MODES, setAspectRatio } from './utils.js';
 
 /**
  * Initializes the settings button and its popup menu.
@@ -58,6 +59,7 @@ export function buildMenu(video, menuContext, configBtn, state, loadVideoSource)
     else if (view === 'audio')     renderAudio();
     else if (view === 'speed')     renderSpeed();
     else if (view === 'subtitles') renderSubtitles();
+    else if (view === 'aspect')    renderAspect();
 
     // "Back" Header — only in sub-views
     const header = menuContext.querySelector('.dynamo-menu-header');
@@ -81,6 +83,7 @@ export function buildMenu(video, menuContext, configBtn, state, loadVideoSource)
 
     const currentSpeed = video.playbackRate === 1 ? 'Normal' : `${video.playbackRate}x`;
     const currentAudioLabel = state.globalAudioTracks.find(a => a.id === state.activeAudioTrackId)?.label || 'Original';
+    const currentAspect = ASPECT_MODES.find(m => m.id === (state.aspectRatio || 'contain'))?.label || 'Fit (Original)';
 
     const audioRow = state.globalAudioTracks.length > 1 ? `
       <li class="dynamo-menu-item" data-target="audio">
@@ -99,6 +102,10 @@ export function buildMenu(video, menuContext, configBtn, state, loadVideoSource)
         <li class="dynamo-menu-item" data-target="quality">
           <span>Quality</span>
           <span class="val">${currentQuality} <span style="font-size:16px;">&rsaquo;</span></span>
+        </li>
+        <li class="dynamo-menu-item" data-target="aspect">
+          <span>Aspect Ratio</span>
+          <span class="val">${currentAspect} <span style="font-size:16px;">&rsaquo;</span></span>
         </li>
         ${audioRow}
         <li class="dynamo-menu-item" data-target="speed">
@@ -239,6 +246,30 @@ export function buildMenu(video, menuContext, configBtn, state, loadVideoSource)
         ev.stopPropagation();
         // Delegate to the subtitles module
         setSubtitle(video, state, item.dataset.label, item.dataset.id);
+        closeMenu();
+      };
+    });
+  }
+
+  // -------------------------------------------------------
+  // Aspect Ratio View
+  // -------------------------------------------------------
+  function renderAspect() {
+    const currentMode = state.aspectRatio || 'contain';
+
+    const items = ASPECT_MODES.map(m =>
+      `<li class="dynamo-menu-item ${currentMode === m.id ? 'selected' : ''}" data-mode="${m.id}">${m.label}</li>`
+    ).join('');
+
+    menuContext.innerHTML = `
+      <div class="dynamo-menu-header" data-target="main"><span style="font-size:18px;">&lsaquo;</span> Aspect Ratio</div>
+      <ul class="dynamo-menu-list">${items}</ul>
+    `;
+
+    menuContext.querySelectorAll('.dynamo-menu-item').forEach(item => {
+      item.onclick = (ev) => {
+        ev.stopPropagation();
+        setAspectRatio(video, wrapper, state, item.dataset.mode);
         closeMenu();
       };
     });

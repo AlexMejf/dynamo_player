@@ -40,7 +40,6 @@ export function buildAmbientMode(video, wrapper, thumbUrl) {
   // Initialization
   if (thumbUrl) {
     const img = new Image();
-    img.crossOrigin = "anonymous";
     
     img.onload = () => drawStaticAmbient(img);
     img.onerror = () => console.warn("DynamoPlayer: Ambient mode thumb failed.");
