@@ -6,29 +6,55 @@
   <title>Dynamo Player — Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="public_html/style.css">
 </head>
 <body>
 
   <header class="site-header">
-    <a class="logo" href="#">⚡ DYNAMO</a>
+    <a class="logo" href="#"><i class="fa-solid fa-bolt-lightning"></i> DYNAMO</a>
     <nav>
       <ul class="nav-links">
         <li><a href="#hero" data-i18n="nav.home">Inicio</a></li>
         <li><a href="#demo" data-i18n="nav.demo">Demo</a></li>
         <li><a href="#whatsnew" data-i18n="nav.whatsnew">Novedades</a></li>
-        <li><a href="#docs" data-i18n="nav.usage">Uso</a></li>
-        <li><a href="#attr-tab" data-i18n="nav.attributes">Atributos</a></li>
-        <li><a href="#fmt-tab" data-i18n="nav.formats">Formatos</a></li>
+        <li class="nav-dropdown">
+          <button class="nav-dropdown-btn" type="button" aria-haspopup="true" aria-expanded="false">
+            <span data-i18n="nav.usage">Uso</span>
+            <i class="fa-solid fa-chevron-down dropdown-chevron" style="font-size:11px;"></i>
+          </button>
+          <div class="nav-dropdown-menu">
+            <a href="#docs" data-tab="instalacion">
+              <span class="dropdown-icon"><i class="fa-solid fa-rocket"></i></span>
+              <span data-i18n="nav.dropdown.install">Instalación</span>
+            </a>
+            <a href="#docs" data-tab="atributos">
+              <span class="dropdown-icon"><i class="fa-solid fa-sliders"></i></span>
+              <span data-i18n="nav.dropdown.attributes">Atributos</span>
+            </a>
+            <a href="#docs" data-tab="formatos">
+              <span class="dropdown-icon"><i class="fa-solid fa-film"></i></span>
+              <span data-i18n="nav.dropdown.formats">Formatos</span>
+            </a>
+            <a href="#docs" data-tab="iconos">
+              <span class="dropdown-icon"><i class="fa-solid fa-palette"></i></span>
+              <span data-i18n="nav.dropdown.icons">Iconos SVG</span>
+            </a>
+            <a href="#docs" data-tab="teclado">
+              <span class="dropdown-icon"><i class="fa-solid fa-keyboard"></i></span>
+              <span data-i18n="nav.dropdown.keyboard">Atajos de Teclado</span>
+            </a>
+          </div>
+        </li>
       </ul>
     </nav>
     <div class="header-actions">
       <button id="lang-toggle" class="badge lang-btn">ES / EN</button>
       <a target="_blank" href="https://github.com/AlexMejf/dynamo_player" style="text-decoration: none;">
-        <span class="badge" >
-        <svg width="18px" height="18px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>github [#142]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -7559.000000)" fill="#e53935"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M94,7399 C99.523,7399 104,7403.59 104,7409.253 C104,7413.782 101.138,7417.624 97.167,7418.981 C96.66,7419.082 96.48,7418.762 96.48,7418.489 C96.48,7418.151 96.492,7417.047 96.492,7415.675 C96.492,7414.719 96.172,7414.095 95.813,7413.777 C98.04,7413.523 100.38,7412.656 100.38,7408.718 C100.38,7407.598 99.992,7406.684 99.35,7405.966 C99.454,7405.707 99.797,7404.664 99.252,7403.252 C99.252,7403.252 98.414,7402.977 96.505,7404.303 C95.706,7404.076 94.85,7403.962 94,7403.958 C93.15,7403.962 92.295,7404.076 91.497,7404.303 C89.586,7402.977 88.746,7403.252 88.746,7403.252 C88.203,7404.664 88.546,7405.707 88.649,7405.966 C88.01,7406.684 87.619,7407.598 87.619,7408.718 C87.619,7412.646 89.954,7413.526 92.175,7413.785 C91.889,7414.041 91.63,7414.493 91.54,7415.156 C90.97,7415.418 89.522,7415.871 88.63,7414.304 C88.63,7414.304 88.101,7413.319 87.097,7413.247 C87.097,7413.247 86.122,7413.234 87.029,7413.87 C87.029,7413.87 87.684,7414.185 88.139,7415.37 C88.139,7415.37 88.726,7417.2 91.508,7416.58 C91.513,7417.437 91.522,7418.245 91.522,7418.489 C91.522,7418.76 91.338,7419.077 90.839,7418.982 C86.865,7417.627 84,7413.783 84,7409.253 C84,7403.59 88.478,7399 94,7399" id="github-[#142]"> </path> </g> </g> </g> </g></svg>
-        v1.8 BETA
-      </span>
+        <span class="badge" style="display:inline-flex;align-items:center;gap:6px;">
+          <i class="fa-brands fa-github" style="font-size:16px;"></i>
+          v1.9 BETA
+        </span>
       </a>
     </div>
   </header>
@@ -41,16 +67,16 @@
         <h1>Dynamo<br><span>Player.</span></h1>
         <p data-i18n="hero.description">Moderno, ligero y sin dependencias. Construido sobre el elemento <code style="font-family:var(--mono);font-size:13px;color:var(--red)">&lt;video&gt;</code> nativo con soporte para HLS, múltiples calidades, subtítulos y modo ambiente.</p>
         <div class="hero-pills">
-          <span class="pill">HLS / .m3u8</span>
-          <span class="pill" data-i18n="hero.pills.quality">Múltiples calidades</span>
-          <span class="pill" data-i18n="hero.pills.subs">Subtítulos</span>
-          <span class="pill">Ambient Mode</span>
-          <span class="pill">Picture-in-Picture</span>
-          <span class="pill" data-i18n="hero.pills.ctx">Menú Contextual</span>
-          <span class="pill" data-i18n="hero.pills.multi">Multi-Player</span>
-          <span class="pill" data-i18n="hero.pills.zero_css">Zero CSS Conflicts</span>
-          <span class="pill" data-i18n="hero.pills.lightweight">~11 KB Gzip</span>
-          <span class="pill">Zero dependencies</span>
+          <span class="pill"><i class="fa-solid fa-tower-broadcast"></i> HLS / .m3u8</span>
+          <span class="pill"><i class="fa-solid fa-layer-group"></i> <span data-i18n="hero.pills.quality">Múltiples calidades</span></span>
+          <span class="pill"><i class="fa-solid fa-closed-captioning"></i> <span data-i18n="hero.pills.subs">Subtítulos</span></span>
+          <span class="pill"><i class="fa-solid fa-wand-magic-sparkles"></i> Ambient Mode</span>
+          <span class="pill"><i class="fa-solid fa-window-restore"></i> Picture-in-Picture</span>
+          <span class="pill"><i class="fa-solid fa-bars-staggered"></i> <span data-i18n="hero.pills.ctx">Menú Contextual</span></span>
+          <span class="pill"><i class="fa-solid fa-display"></i> <span data-i18n="hero.pills.multi">Multi-Player</span></span>
+          <span class="pill"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="hero.pills.zero_css">Zero CSS Conflicts</span></span>
+          <span class="pill"><i class="fa-solid fa-feather-pointed"></i> <span data-i18n="hero.pills.lightweight">~11 KB Gzip</span></span>
+          <span class="pill"><i class="fa-solid fa-circle-check"></i> Zero dependencies</span>
         </div>
       </div>
 
@@ -90,10 +116,7 @@
       <div class="demo-tester">
         <form id="demo-url-form" class="demo-url-form" onsubmit="event.preventDefault();">
           <div class="demo-input-wrapper">
-            <svg class="demo-input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
+            <i class="fa-solid fa-link demo-input-icon" style="font-size:14px;"></i>
             <input
               type="text"
               id="demo-url-input"
@@ -107,16 +130,11 @@
           </div>
           <div class="demo-actions">
             <button type="submit" id="demo-load-btn" class="demo-btn demo-btn-primary">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-              </svg>
+              <i class="fa-solid fa-play"></i>
               <span data-i18n="demo.load_btn">Cargar</span>
             </button>
             <button type="button" id="demo-reset-btn" class="demo-btn demo-btn-secondary" title="Cargar video y poster predeterminados">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="1 4 1 10 7 10"></polyline>
-                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-              </svg>
+              <i class="fa-solid fa-rotate-left"></i>
               <span data-i18n="demo.reset_btn">Predeterminado</span>
             </button>
           </div>
@@ -125,9 +143,9 @@
         <div class="demo-presets-row">
           <span class="demo-presets-label" data-i18n="demo.presets_label">Presets rápidos:</span>
           <div class="demo-preset-pills">
-            <button type="button" class="demo-preset-btn active" data-preset="default" data-i18n="demo.preset_default">Default (MP4)</button>
-            <button type="button" class="demo-preset-btn" data-preset="hls" data-url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" data-i18n="demo.preset_hls">HLS Stream (.m3u8)</button>
-            <button type="button" class="demo-preset-btn" data-preset="oceans" data-url="https://vjs.zencdn.net/v/oceans.mp4" data-poster="https://vjs.zencdn.net/v/oceans.png" data-i18n="demo.preset_oceans">Oceans (1080p MP4)</button>
+            <button type="button" class="demo-preset-btn active" data-preset="default"><i class="fa-solid fa-circle-play"></i> <span data-i18n="demo.preset_default">Default (MP4)</span></button>
+            <button type="button" class="demo-preset-btn" data-preset="hls" data-url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"><i class="fa-solid fa-tower-broadcast"></i> <span data-i18n="demo.preset_hls">HLS Stream (.m3u8)</span></button>
+            <button type="button" class="demo-preset-btn" data-preset="oceans" data-url="https://vjs.zencdn.net/v/oceans.mp4" data-poster="https://vjs.zencdn.net/v/oceans.png"><i class="fa-solid fa-film"></i> <span data-i18n="demo.preset_oceans">Oceans (1080p MP4)</span></button>
           </div>
         </div>
 
@@ -148,44 +166,51 @@
 
   <section class="snap-section" id="whatsnew">
     <div class="demo-inner" style="padding-top: 60px; padding-bottom: 60px;">
-      <div class="section-label" data-i18n="whatsnew.label">Versión 1.8</div>
+      <div class="section-label" data-i18n="whatsnew.label">Versión 1.9</div>
       <div class="docs-title" data-i18n="whatsnew.title">Novedades y Mejoras</div>
       <div class="docs-subtitle" data-i18n="whatsnew.subtitle">Conoce las nuevas optimizaciones de sincronización, aislamiento y arquitectura.</div>
 
-      <div class="attrs-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 24px;">
+      <div class="attrs-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 24px;">
         <div class="attr-card" style="padding: 24px;">
-          <div style="font-size: 24px; margin-bottom: 12px;">🖱️</div>
-          <div class="attr-name" style="font-size: 14px;" data-i18n="whatsnew.ctx_title">Menú Contextual Cinemático</div>
-          <div class="attr-type" data-i18n="whatsnew.ctx_badge">Click Derecho / Móvil</div>
-          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.ctx_desc">Menú contextual al hacer click derecho (o presión sostenida en táctiles) con el diseño Glassmorphism de ajustes. Bucle continuo, captura de pantalla en HD (PNG), copiar enlace con tiempo, PiP y estadísticas técnicas con cero fugas de listeners vía AbortController.</div>
+          <div class="card-icon"><i class="fa-solid fa-crop-simple"></i></div>
+          <div class="attr-name" style="font-size: 15px;" data-i18n="whatsnew.aspect_title">Aspect Ratio Ajustable</div>
+          <div class="attr-type" data-i18n="whatsnew.aspect_badge">Pantalla &amp; Zoom Móvil</div>
+          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.aspect_desc">Adapta el video a tu pantalla con facilidad. Alterna entre el formato original y el modo rellenar pantalla sin deformaciones, eliminando las barras negras en teléfonos móviles y monitores anchos.</div>
         </div>
 
         <div class="attr-card" style="padding: 24px;">
-          <div style="font-size: 24px; margin-bottom: 12px;">🎯</div>
-          <div class="attr-name" style="font-size: 14px;" data-i18n="whatsnew.autohide_title">Ocultamiento Sincronizado</div>
+          <div class="card-icon"><i class="fa-solid fa-palette"></i></div>
+          <div class="attr-name" style="font-size: 15px;" data-i18n="whatsnew.icons_title">Personalizable Icons Config</div>
+          <div class="attr-type" data-i18n="whatsnew.icons_badge">Iconos &amp; CDN</div>
+          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.icons_desc">Configura y personaliza los iconos del reproductor directamente desde JavaScript o CDN. Cambia play, pausa, volumen y ajustes con tus propios SVGs al instante sin recompilar.</div>
+        </div>
+
+        <div class="attr-card" style="padding: 24px;">
+          <div class="card-icon"><i class="fa-solid fa-bars-staggered"></i></div>
+          <div class="attr-name" style="font-size: 15px;" data-i18n="whatsnew.ctx_title">Menú de Click Izquierdo &amp; Derecho</div>
+          <div class="attr-type" data-i18n="whatsnew.ctx_badge">Ajustes &amp; Contexto</div>
+          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.ctx_desc">Acceso completo a todos los controles: menú de ajustes con click izquierdo (calidades, audio, subtítulos y velocidad) y menú contextual con click derecho o toque sostenido (capturas HD, bucle, PiP y estadísticas).</div>
+        </div>
+
+        <div class="attr-card" style="padding: 24px;">
+          <div class="card-icon"><i class="fa-solid fa-eye-slash"></i></div>
+          <div class="attr-name" style="font-size: 15px;" data-i18n="whatsnew.autohide_title">Controles Inteligentes</div>
           <div class="attr-type" data-i18n="whatsnew.autohide_badge">UX &amp; Controles</div>
-          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.autohide_desc">Los controles se mantienen visibles mientras el menú de ajustes esté abierto. La inactividad se reanuda al cerrarlo y el menú se cierra automáticamente si los controles se ocultan por inactividad o pausa.</div>
+          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.autohide_desc">Los controles se ocultan suavemente durante la reproducción para no tapar el contenido, pero permanecen visibles mientras tengas abierto cualquier menú de configuración.</div>
         </div>
 
         <div class="attr-card" style="padding: 24px;">
-          <div style="font-size: 24px; margin-bottom: 12px;">🛡️</div>
-          <div class="attr-name" style="font-size: 14px;" data-i18n="whatsnew.css_title">Aislamiento CSS 100%</div>
-          <div class="attr-type" data-i18n="whatsnew.css_badge">Cero Conflictos</div>
-          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.css_desc">Estilos 100% encapsulados bajo prefijos .dynamo-*. Se eliminaron clases genéricas globales (como .hidden) para garantizar 0 colisiones con Navbars, Tailwind CSS, Bootstrap o layouts externos.</div>
+          <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="attr-name" style="font-size: 15px;" data-i18n="whatsnew.css_title">Cero Conflictos de Diseño</div>
+          <div class="attr-type" data-i18n="whatsnew.css_badge">Aislamiento Total</div>
+          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.css_desc">Estilos totalmente encapsulados bajo prefijos .dynamo-*, eliminando colisiones con Tailwind CSS o Bootstrap y garantizando que tu sitio mantenga su apariencia intacta.</div>
         </div>
 
         <div class="attr-card" style="padding: 24px;">
-          <div style="font-size: 24px; margin-bottom: 12px;">👥</div>
-          <div class="attr-name" style="font-size: 14px;" data-i18n="whatsnew.multi_title">Soporte Multi-Reproductor</div>
-          <div class="attr-type" data-i18n="whatsnew.multi_badge">Arquitectura Scoped</div>
-          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.multi_desc">Múltiples reproductores pueden convivir en una misma página de manera totalmente independiente, con closures y consultas DOM aisladas, soportando clases .dynamo-player o data-dynamo.</div>
-        </div>
-
-        <div class="attr-card" style="padding: 24px;">
-          <div style="font-size: 24px; margin-bottom: 12px;">⚡</div>
-          <div class="attr-name" style="font-size: 14px;" data-i18n="whatsnew.weight_title">51% Más Ligero (~8 KB Gzip)</div>
-          <div class="attr-type" data-i18n="whatsnew.weight_badge">Rendimiento Extremo</div>
-          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.weight_desc">El bundle se redujo de 63 KB a solo 30.9 KB (reducción del 51% y 55% en transferencia de red gzip) mediante la vectorización pura de SVG y compresión avanzada.</div>
+          <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
+          <div class="attr-name" style="font-size: 15px;" data-i18n="whatsnew.multi_title">Múltiples Reproductores</div>
+          <div class="attr-type" data-i18n="whatsnew.multi_badge">Multi-Instancia</div>
+          <div class="attr-desc" style="font-size: 13px; line-height: 1.6;" data-i18n="whatsnew.multi_desc">Inserta tantos reproductores como necesites en una misma página; cada uno opera de forma totalmente independiente sin interferir en los demás.</div>
         </div>
       </div>
     </div>
@@ -197,10 +222,11 @@
       <div class="docs-subtitle" data-i18n="docs.subtitle">Todo lo que necesitas para integrar Dynamo Player en tu proyecto.</div>
 
       <div class="tabs">
-        <button class="tab-btn active" data-tab="instalacion" data-i18n="docs.tabs.install">Instalación</button>
-        <button class="tab-btn" data-tab="atributos" id="attr-tab" data-i18n="docs.tabs.attributes">Atributos</button>
-        <button class="tab-btn" data-tab="formatos"  id="fmt-tab" data-i18n="docs.tabs.formats">Formatos de fuente</button>
-        <button class="tab-btn" data-tab="teclado" data-i18n="docs.tabs.keyboard">Teclado</button>
+        <button class="tab-btn active" data-tab="instalacion"><i class="fa-solid fa-rocket"></i> <span data-i18n="docs.tabs.install">Instalación</span></button>
+        <button class="tab-btn" data-tab="atributos" id="attr-tab"><i class="fa-solid fa-sliders"></i> <span data-i18n="docs.tabs.attributes">Atributos</span></button>
+        <button class="tab-btn" data-tab="formatos"  id="fmt-tab"><i class="fa-solid fa-film"></i> <span data-i18n="docs.tabs.formats">Formatos de fuente</span></button>
+        <button class="tab-btn" data-tab="iconos"    id="icons-tab"><i class="fa-solid fa-palette"></i> <span data-i18n="docs.tabs.icons">Iconos</span></button>
+        <button class="tab-btn" data-tab="teclado"><i class="fa-solid fa-keyboard"></i> <span data-i18n="docs.tabs.keyboard">Teclado</span></button>
       </div>
 
       <div class="tab-pane active" id="tab-instalacion">
@@ -213,7 +239,7 @@
               <div class="code-wrap">
                 <div class="code-header">
                   <span class="code-lang">HTML</span>
-                  <button class="copy-btn" onclick="copyCode(this)" data-i18n="docs.install.copy_btn">Copiar</button>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> <span data-i18n="docs.install.copy_btn">Copiar</span></button>
                 </div>
                 <pre><span class="tg">&lt;script</span> <span class="at">src</span>=<span class="vl">"https://alexmejf.github.io/dynamo_player/dist/dynamo-player.min.js"</span><span class="tg">&gt;&lt;/script&gt;</span></pre>
               </div>
@@ -227,7 +253,7 @@
               <div class="code-wrap">
                 <div class="code-header">
                   <span class="code-lang">HTML</span>
-                  <button class="copy-btn" onclick="copyCode(this)" data-i18n="docs.install.copy_btn">Copiar</button>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> <span data-i18n="docs.install.copy_btn">Copiar</span></button>
                 </div>
                 <pre><span class="tg">&lt;video</span>
   <span class="at">class</span>=<span class="vl">"dynamo-player"</span>     <span class="cm" data-i18n="docs.code_comments.req">// o id="dynamoPlayer" / data-dynamo</span>
@@ -249,7 +275,7 @@
               <div class="code-wrap">
                 <div class="code-header">
                   <span class="code-lang">JavaScript</span>
-                  <button class="copy-btn" onclick="copyCode(this)" data-i18n="docs.install.copy_btn">Copiar</button>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> <span data-i18n="docs.install.copy_btn">Copiar</span></button>
                 </div>
                 <pre><span data-i18n="docs.code_comments.apiInit" class="cm">// Inicializa automáticamente todos los reproductores</span>
 <span class="t">DynamoPlayer</span><span class="t">.</span><span class="fn">init</span><span class="t">();</span>
@@ -338,6 +364,126 @@
         </div>
       </div>
 
+      <div class="tab-pane" id="tab-iconos">
+        <p style="color:var(--muted);font-size:13px;margin-bottom:20px;" data-i18n="docs.icons.notice">Personaliza o sobrescribe cualquier icono SVG directamente mediante la API en tiempo de ejecución o desde el CDN, sin recompilar el proyecto y con actualización reactiva en caliente.</p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h3 data-i18n="docs.icons.step1_title">Múltiples iconos (Recomendado)</h3>
+              <p data-i18n="docs.icons.step1_desc">Actualiza uno o varios iconos simultáneamente con setIcons(). Los reproductores activos en la página se actualizarán al instante:</p>
+              <div class="code-wrap">
+                <div class="code-header">
+                  <span class="code-lang">JavaScript</span>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> <span data-i18n="docs.install.copy_btn">Copiar</span></button>
+                </div>
+                <pre><span class="t">DynamoPlayer</span><span class="t">.</span><span class="fn">setIcons</span><span class="t">({</span>
+  <span class="at">play</span><span class="t">:</span>       <span class="vl">'&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"&gt;...&lt;/svg&gt;'</span><span class="t">,</span>
+  <span class="at">settings</span><span class="t">:</span>   <span class="vl">'&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"&gt;...&lt;/svg&gt;'</span><span class="t">,</span>
+  <span class="at">forward</span><span class="t">:</span>    <span class="vl">'&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"&gt;...&lt;/svg&gt;'</span><span class="t">,</span>
+  <span class="at">volumeHigh</span><span class="t">:</span> <span class="vl">'&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"&gt;...&lt;/svg&gt;'</span>
+<span class="t">});</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h3 data-i18n="docs.icons.step2_title">Icono individual o Proxy reactivo</h3>
+              <p data-i18n="docs.icons.step2_desc">Modifica iconos individuales mediante setIcon() o asignando directamente en controls / DynamoPlayer.icons:</p>
+              <div class="code-wrap">
+                <div class="code-header">
+                  <span class="code-lang">JavaScript</span>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> <span data-i18n="docs.install.copy_btn">Copiar</span></button>
+                </div>
+                <pre><span class="cm" data-i18n="docs.icons.comment_single">// Cambio individual con setIcon():</span>
+<span class="t">DynamoPlayer</span><span class="t">.</span><span class="fn">setIcon</span><span class="t">(</span><span class="vl">'play'</span><span class="t">,</span> <span class="vl">'&lt;svg&gt;...&lt;/svg&gt;'</span><span class="t">);</span>
+
+<span class="cm" data-i18n="docs.icons.comment_proxy">// Asignación directa en caliente con el alias 'controls':</span>
+<span class="t">controls</span><span class="t">[</span><span class="vl">'settings'</span><span class="t">]</span> <span class="t">=</span> <span class="vl">'&lt;svg&gt;...&lt;/svg&gt;'</span><span class="t">;</span>
+
+<span class="cm" data-i18n="docs.icons.comment_instance">// O por instancia de reproductor específica:</span>
+<span class="at">const</span> <span class="t">video</span> <span class="t">=</span> <span class="t">document</span><span class="t">.</span><span class="fn">querySelector</span><span class="t">(</span><span class="vl">'#dynamoPlayer'</span><span class="t">);</span>
+<span class="t">video</span><span class="t">.</span><span class="at">dynamoPlayer</span><span class="t">.</span><span class="fn">setIcons</span><span class="t">({</span> <span class="at">pip</span><span class="t">:</span> <span class="vl">'&lt;svg&gt;...&lt;/svg&gt;'</span> <span class="t">});</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h3 data-i18n="docs.icons.step3_title">Restauración y consulta</h3>
+              <p data-i18n="docs.icons.step3_desc">Restaura todos los iconos originales o consulta el código predeterminado:</p>
+              <div class="code-wrap">
+                <div class="code-header">
+                  <span class="code-lang">JavaScript</span>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> <span data-i18n="docs.install.copy_btn">Copiar</span></button>
+                </div>
+                <pre><span class="cm" data-i18n="docs.icons.comment_reset">// Restaurar todos los iconos por defecto:</span>
+<span class="t">DynamoPlayer</span><span class="t">.</span><span class="fn">resetIcons</span><span class="t">();</span>
+
+<span class="cm" data-i18n="docs.icons.comment_get">// Consultar los iconos originales:</span>
+<span class="at">const</span> <span class="t">defaultIcons</span> <span class="t">=</span> <span class="t">DynamoPlayer</span><span class="t">.</span><span class="fn">getDefaultIcons</span><span class="t">();</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border)">
+          <div class="docs-title" style="font-size:20px;margin-bottom:6px;" data-i18n="docs.icons.table_title">Catálogo de Nombres y Aliases</div>
+          <div class="docs-subtitle" style="margin-bottom:20px;" data-i18n="docs.icons.table_subtitle">Nombres soportados por setIcons() y DynamoPlayer.icons:</div>
+          <div class="attrs-grid">
+            <div class="attr-card">
+              <div class="attr-name">play / pause</div>
+              <div class="attr-type">Barra &amp; Overscreen</div>
+              <div class="attr-desc" data-i18n="docs.icons.desc_play">Botones de reproducción y pausa principales.</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">forward10 / back10</div>
+              <div class="attr-type">Aliases: forward, fwd, backward, back</div>
+              <div class="attr-desc" data-i18n="docs.icons.desc_skip">Botones de salto ±10 segundos en la barra y centro de pantalla.</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">volumeHigh / volumeLow</div>
+              <div class="attr-type">Aliases: volume, volHigh, volLow</div>
+              <div class="attr-desc" data-i18n="docs.icons.desc_vol">Estados de volumen alto y moderado en el control deslizante.</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">volumeMute</div>
+              <div class="attr-type">Aliases: mute, volMute</div>
+              <div class="attr-desc" data-i18n="docs.icons.desc_mute">Icono de audio silenciado (mute).</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">settings</div>
+              <div class="attr-type">Alias: config</div>
+              <div class="attr-desc" data-i18n="docs.icons.desc_settings">Botón de rueda de engranaje para abrir el menú de ajustes.</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">pip</div>
+              <div class="attr-type">Aliases: pictureInPicture, inPicture</div>
+              <div class="attr-desc" data-i18n="docs.icons.desc_pip">Botón de Picture-in-Picture en controles y menú contextual.</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">fullscreen / exitFullscreen</div>
+              <div class="attr-type">Alias: maximize</div>
+              <div class="attr-desc" data-i18n="docs.icons.desc_fs">Entrar y salir de pantalla completa.</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">loop / camera / aspectRatio</div>
+              <div class="attr-type">Menú Contextual (Click derecho)</div>
+              <div class="attr-desc" data-i18n="docs.icons.desc_ctx1">Iconos de bucle, captura de fotograma y relación de aspecto.</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-name">sparkles / chart / info</div>
+              <div class="attr-type">Menú Contextual (Click derecho)</div>
+              <div class="attr-desc" data-i18n="docs.icons.desc_ctx2">Iconos de modo ambiente, estadísticas técnicas ("Stats for Nerds") y créditos.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="tab-pane" id="tab-teclado">
         <p style="color:var(--muted);font-size:13px;margin-bottom:24px;" data-i18n="docs.keyboard.notice">El reproductor captura eventos de teclado cuando tiene el foco. Haz clic sobre él para enfocarlo.</p>
         <div class="keys-grid">
@@ -351,15 +497,15 @@
           <div class="attrs-grid">
             <div class="attr-card">
               <div class="attr-name">Chrome / Edge</div>
-              <div class="attr-desc" style="margin-top:6px;">✅ <span data-i18n="docs.keyboard.compat_chrome">Soporte completo incluyendo Ambient Mode y Auto Thumbnails.</span></div>
+              <div class="attr-desc" style="margin-top:6px;"><i class="fa-solid fa-circle-check" style="color:#4caf50;margin-right:6px;"></i><span data-i18n="docs.keyboard.compat_chrome">Soporte completo incluyendo Ambient Mode y Auto Thumbnails.</span></div>
             </div>
             <div class="attr-card">
               <div class="attr-name">Firefox</div>
-              <div class="attr-desc" style="margin-top:6px;">✅ <span data-i18n="docs.keyboard.compat_firefox">Soporte completo. HLS vía hls.js.</span></div>
+              <div class="attr-desc" style="margin-top:6px;"><i class="fa-solid fa-circle-check" style="color:#4caf50;margin-right:6px;"></i><span data-i18n="docs.keyboard.compat_firefox">Soporte completo. HLS vía hls.js.</span></div>
             </div>
             <div class="attr-card">
               <div class="attr-name">Safari</div>
-              <div class="attr-desc" style="margin-top:6px;">✅ <span data-i18n="docs.keyboard.compat_safari">HLS nativo. Ambient Mode requiere cabeceras CORS en el servidor.</span></div>
+              <div class="attr-desc" style="margin-top:6px;"><i class="fa-solid fa-circle-check" style="color:#4caf50;margin-right:6px;"></i><span data-i18n="docs.keyboard.compat_safari">HLS nativo. Ambient Mode requiere cabeceras CORS en el servidor.</span></div>
             </div>
           </div>
         </div>
@@ -369,7 +515,7 @@
   </section>
 
   <footer class="site-footer">
-    <span>⚡ Dynamo Player v1.8 BY Aex Studios</span>
+    <span><i class="fa-solid fa-bolt-lightning" style="color:var(--red);margin-right:6px;"></i>Dynamo Player v1.9 BY Aex Studios</span>
     <span>MIT License — Vanilla JS · Zero dependencies</span>
   </footer>
 

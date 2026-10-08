@@ -1,5 +1,5 @@
 /*!
- * Dynamo Player v1.8
+ * Dynamo Player v1.9
  * Main file — orchestrates all modules.
  * *
  */
@@ -233,19 +233,19 @@ import { buildAmbientMode } from './modules/ambient.js';
         const playOs = wrapper.querySelector('.play-pause-os');
         if (playOs) playOs.innerHTML = DynamoIcons.pause;
       }
-      if (match('back10')) {
+      if (match('back10') || match('backward') || match('back')) {
         const backBtn = wrapper.querySelector('.dynamo-back-btn');
-        if (backBtn) backBtn.innerHTML = DynamoIcons.back10;
+        if (backBtn) backBtn.innerHTML = DynamoIcons.back10 || DynamoIcons.backward;
         const backOs = wrapper.querySelector('.back-10-os');
-        if (backOs) backOs.innerHTML = DynamoIcons.back10;
+        if (backOs) backOs.innerHTML = DynamoIcons.back10 || DynamoIcons.backward;
       }
-      if (match('forward10')) {
+      if (match('forward10') || match('forward') || match('fwd')) {
         const fwdBtn = wrapper.querySelector('.dynamo-fwd-btn');
-        if (fwdBtn) fwdBtn.innerHTML = DynamoIcons.forward10;
+        if (fwdBtn) fwdBtn.innerHTML = DynamoIcons.forward10 || DynamoIcons.forward;
         const fwdOs = wrapper.querySelector('.fwd-10-os');
-        if (fwdOs) fwdOs.innerHTML = DynamoIcons.forward10;
+        if (fwdOs) fwdOs.innerHTML = DynamoIcons.forward10 || DynamoIcons.forward;
       }
-      if (match('volumeHigh') || match('volumeLow') || match('volumeMute')) {
+      if (match('volumeHigh') || match('volumeLow') || match('volumeMute') || match('volume') || match('mute')) {
         const muteBtn = wrapper.querySelector('.dynamo-mute-btn');
         if (muteBtn) {
           muteBtn.innerHTML = (video.muted || video.volume === 0)
@@ -259,11 +259,11 @@ import { buildAmbientMode } from './modules/ambient.js';
           fsBtn.innerHTML = document.fullscreenElement ? DynamoIcons.exitFullscreen : (DynamoIcons.fullscreen || DynamoIcons.maximize);
         }
       }
-      if (match('config')) {
+      if (match('config') || match('settings')) {
         const configBtn = wrapper.querySelector('.dynamo-config-btn');
-        if (configBtn) configBtn.innerHTML = DynamoIcons.config;
+        if (configBtn) configBtn.innerHTML = DynamoIcons.config || DynamoIcons.settings;
       }
-      if (match('pip')) {
+      if (match('pip') || match('pictureInPicture') || match('inPicture')) {
         const pipBtn = wrapper.querySelector('.dynamo-pip-btn');
         if (pipBtn) pipBtn.innerHTML = DynamoIcons.pip;
       }

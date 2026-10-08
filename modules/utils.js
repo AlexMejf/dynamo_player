@@ -64,7 +64,7 @@ export const ASPECT_MODES = [
  * @param {string} mode - 'contain' | 'cover' | '16-9' | '4-3'
  * @returns {string} The active mode's human-readable label
  */
-export function setAspectRatio(video, wrapper, state, mode) {
+export function setAspectRatio(video, wrapper, state, mode, options = {}) {
   state.aspectRatio = mode;
 
   wrapper.classList.remove('fit-cover');
@@ -87,6 +87,9 @@ export function setAspectRatio(video, wrapper, state, mode) {
 
   const found = ASPECT_MODES.find(m => m.id === mode);
   const label = found ? found.label : 'Fit';
-  wrapper.dispatchEvent(new CustomEvent('dynamo-aspect-change', { detail: { mode, label }, bubbles: true }));
+  wrapper.dispatchEvent(new CustomEvent('dynamo-aspect-change', {
+    detail: { mode, label, ...options },
+    bubbles: true
+  }));
   return label;
 }

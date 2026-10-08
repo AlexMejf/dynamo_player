@@ -1,7 +1,7 @@
 # ⚡ Dynamo Player
 
 
-> **v1.8 Beta** --- A modern, lightweight and dependency-free video
+> **v1.9** --- A modern, lightweight and dependency-free video
 > player built on top of the native HTML `<video>` element with support
 > for **HLS, multiple qualities, subtitles, ambient mode, auto
 > thumbnails, right-click context menu, PiP, audio tracks, and more**.
@@ -161,7 +161,7 @@ Dynamo Player includes a native right-click context menu (and long-press on touc
 ### Actions Included:
 - **🔁 Loop (Bucle):** Toggle continuous looping playback with a persistent visual checkmark.
 - **📐 Aspect Ratio / Zoom-to-Fill (Ajuste de pantalla):** Toggle between **Ajustar (Original/Contain)** and **Rellenar (Zoom/Cover)** without anamorphic stretching, cleanly filling black bars on non-16:9 displays.
-- **📱 Mobile Pinch-to-Zoom:** Natural two-finger pinch gesture on mobile devices to dynamically zoom and fill the screen without video distortion.
+- **📱 Immersive Mobile Pinch-to-Zoom:** Natural two-finger pinch gesture on mobile devices with live 60 FPS scale tracking, container boundary clipping, spring physics, and an interactive glassmorphism badge ('Zoom para rellenar' / 'Ajustar a la pantalla') to seamlessly toggle between **Fill (Cover)** and **Fit (Contain)**.
 - **📸 Snapshot HD (Captura de fotograma):** Capture native-resolution video frames via Canvas and instantly download a clean PNG image.
 - **🪟 Picture-in-Picture (PiP):** Trigger floating window mode directly from cursor.
 - **✨ Ambient Mode Toggle:** Turn ambient background glow on and off.

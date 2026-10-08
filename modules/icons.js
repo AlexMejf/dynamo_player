@@ -6,7 +6,6 @@
 
 import defaultIcons from './icons.json';
 
-// Broadcast icon changes to any live players on the page
 function notifyIconChange(iconName, svg) {
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('dynamo-icons-updated', {
@@ -15,27 +14,53 @@ function notifyIconChange(iconName, svg) {
   }
 }
 
-// Internal icons store initialized with defaults
+// 1. Groups of aliases: each group contains all the names that refer to the same icon
+const ALIAS_GROUPS = [
+  ['fullscreen', 'maximize'],
+  ['settings', 'config'],
+  ['forward10', 'forward', 'fwd'],
+  ['back10', 'backward', 'back'],
+  ['pip', 'pictureInPicture', 'inPicture'],
+  ['volumeHigh', 'volume', 'volHigh'],
+  ['volumeLow', 'volLow'],
+  ['volumeMute', 'mute', 'volMute']
+];
+
+// 2. Flattened map: each key points to all its sibling aliases
+const ALIAS_MAP = {};
+for (const group of ALIAS_GROUPS) {
+  for (const key of group) {
+    ALIAS_MAP[key] = group;
+  }
+}
+
 const iconsStore = { ...defaultIcons };
 
-// Proxy handler to intercept assignments like controls['play'] = '<svg>...'
 const iconsProxyHandler = {
   get(target, prop) {
-    if (prop in target) {
-      return target[prop];
+    if (prop in target) return target[prop];
+
+    // If it has aliases, we look for the first available in target or defaultIcons
+    const synonyms = ALIAS_MAP[prop] || [];
+    for (const alias of synonyms) {
+      if (alias in target) return target[alias];
+      if (alias in defaultIcons) return defaultIcons[alias];
     }
-    if (prop === 'maximize') {
-      return target.fullscreen || defaultIcons.fullscreen || '';
-    }
+
     return defaultIcons[prop] || '';
   },
+
   set(target, prop, value) {
     target[prop] = value;
-    if (prop === 'fullscreen') {
-      target.maximize = value;
-    } else if (prop === 'maximize') {
-      target.fullscreen = value;
+
+    // Automatically update all alias names
+    const synonyms = ALIAS_MAP[prop];
+    if (synonyms) {
+      for (const alias of synonyms) {
+        target[alias] = value;
+      }
     }
+
     notifyIconChange(prop, value);
     return true;
   }
@@ -43,41 +68,23 @@ const iconsProxyHandler = {
 
 export const DynamoIcons = new Proxy(iconsStore, iconsProxyHandler);
 
-/**
- * Sets or overrides a single icon.
- * @param {string} name
- * @param {string} svg
- */
 export function setIcon(name, svg) {
   DynamoIcons[name] = svg;
 }
 
-/**
- * Sets or overrides multiple icons at once.
- * @param {Object.<string, string>} customIcons
- */
 export function setIcons(customIcons) {
   if (!customIcons || typeof customIcons !== 'object') return;
-  Object.keys(customIcons).forEach(key => {
-    DynamoIcons[key] = customIcons[key];
+  Object.entries(customIcons).forEach(([key, val]) => {
+    DynamoIcons[key] = val;
   });
 }
 
-/**
- * Resets all icons back to the original definitions in icons.json.
- */
 export function resetIcons() {
-  Object.keys(iconsStore).forEach(key => {
-    delete iconsStore[key];
-  });
+  Object.keys(iconsStore).forEach(key => delete iconsStore[key]);
   Object.assign(iconsStore, defaultIcons);
   notifyIconChange('*', null);
 }
 
-/**
- * Gets a copy of the default icons from icons.json.
- * @returns {Object.<string, string>}
- */
 export function getDefaultIcons() {
   return { ...defaultIcons };
 }
